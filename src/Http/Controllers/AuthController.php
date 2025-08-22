@@ -12,6 +12,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Hash as FacadesHash;
 
 class AuthController extends Controller
 {
@@ -136,6 +137,30 @@ class AuthController extends Controller
     return $status === Password::PASSWORD_RESET
             ? redirect()->route('auth.login')->with('status', __($status))
             : back()->withErrors(['email' => [__($status)]]);
+    }
+
+    // Confirm password
+    public function showConfirmPassword()
+    {
+        return view('AuthPackage::auth.confirm');
+    }
+
+    public function confirmPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        $user = $request->user();
+
+        if (! FacadesHash::check($request->password, $user->password)) {
+            return back()->withErrors(['password' => 'The provided password does not match our records.']);
+        }
+
+        // Mark the password as confirmed for the current session
+        $request->session()->put('auth.password_confirmed_at', time());
+
+        return redirect()->intended('/');
     }
 
     /**

@@ -17,6 +17,10 @@ Route::middleware('web')->prefix('auth')->name('auth.')->group(function () {
     Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
     Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
 
+    // Confirm password (requires auth)
+    Route::get('password/confirm', [AuthController::class, 'showConfirmPassword'])->name('password.confirm')->middleware('auth');
+    Route::post('password/confirm', [AuthController::class, 'confirmPassword'])->name('password.confirm.post')->middleware('auth');
+
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 });
 
@@ -27,4 +31,5 @@ Route::middleware('web')->group(function () {
 
     Route::get('password/reset', fn () => redirect()->route('auth.password.request'))->name('password.request');
     Route::get('password/reset/{token}', function ($token) { return redirect()->route('auth.password.reset', $token); })->name('password.reset');
+    Route::get('password/confirm', fn () => redirect()->route('auth.password.confirm'))->name('password.confirm');
 });
