@@ -1,0 +1,20 @@
+<?php
+
+namespace Dotclang\AuthPackage\Http\Controllers\Auth;
+
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+class LogoutController extends Controller
+{
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('login');
+    }
+}

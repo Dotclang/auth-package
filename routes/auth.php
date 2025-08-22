@@ -1,27 +1,31 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Dotclang\AuthPackage\Http\Controllers\AuthController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\LoginController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\RegisterController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\ConfirmPasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\LogoutController;
 
 Route::middleware('web')->prefix('auth')->name('auth.')->group(function () {
     // Authentication
-    Route::get('login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('login', [AuthController::class, 'login'])->name('login.attempt');
+    Route::get('login', [LoginController::class, 'showLogin'])->name('login');
+    Route::post('login', [LoginController::class, 'login'])->name('login.attempt');
 
-    Route::get('register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('register', [AuthController::class, 'register'])->name('register.attempt');
+    Route::get('register', [RegisterController::class, 'showRegister'])->name('register');
+    Route::post('register', [RegisterController::class, 'register'])->name('register.attempt');
 
     // Password reset
-    Route::get('password/reset', [AuthController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('password/email', [AuthController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('throttle:6,1');
-    Route::get('password/reset/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
-    Route::post('password/reset', [AuthController::class, 'resetPassword'])->name('password.update');
+    Route::get('password/reset', [PasswordController::class, 'showForgotPassword'])->name('password.request');
+    Route::post('password/email', [PasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('throttle:6,1');
+    Route::get('password/reset/{token}', [PasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('password/reset', [PasswordController::class, 'resetPassword'])->name('password.update');
 
     // Confirm password (requires auth)
-    Route::get('password/confirm', [AuthController::class, 'showConfirmPassword'])->name('password.confirm')->middleware('auth');
-    Route::post('password/confirm', [AuthController::class, 'confirmPassword'])->name('password.confirm.post')->middleware('auth');
+    Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmPassword'])->name('password.confirm')->middleware('auth');
+    Route::post('password/confirm', [ConfirmPasswordController::class, 'confirmPassword'])->name('password.confirm.post')->middleware('auth');
 
-    Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
 });
 
 // Compatibility: redirect common unprefixed routes to package-prefixed routes
