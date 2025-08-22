@@ -29,5 +29,21 @@
             "type": "vcs",
             "url": "https://github.com/Dotclang/auth-package.git"
         }
-    ]
+    ],
+    "require-dev": {
+        "pestphp/pest": "4.x-dev"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }
