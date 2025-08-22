@@ -1,6 +1,6 @@
 # AuthPackage
 
-This package provides authentication views and routes for Laravel (login, register, password reset) using Tailwind-styled blade templates.
+This package provides authentication views and routes for Laravel (login, register, password reset) using Tailwind-styled blade templates it just simple UI.
 
 ## Routes
 
