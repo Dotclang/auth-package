@@ -3,6 +3,11 @@
 namespace Dotclang\AuthPackage\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Dotclang\AuthPackage\Http\Requests\LoginRequest;
+use Dotclang\AuthPackage\Http\Requests\RegisterRequest;
+use Dotclang\AuthPackage\Http\Requests\SendResetLinkRequest;
+use Dotclang\AuthPackage\Http\Requests\ResetPasswordRequest;
+use Dotclang\AuthPackage\Http\Requests\ConfirmPasswordRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,13 +26,9 @@ class AuthController extends Controller
         return view('AuthPackage::auth.login');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-            'remember' => 'nullable|boolean',
-        ]);
+        // Validated by LoginRequest
 
         $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
 
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        $attemptRemember = $request->boolean('remember');
+    $attemptRemember = $request->boolean('remember');
 
         if (! Auth::attempt($credentials, $attemptRemember)) {
             RateLimiter::hit($throttleKey, 60);
@@ -58,13 +59,9 @@ class AuthController extends Controller
         return view('AuthPackage::auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $request->validate([
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        // Validated by RegisterRequest
 
         $userModel = app('config')->get('auth.providers.users.model', 'App\\Models\\User');
 
@@ -100,9 +97,9 @@ class AuthController extends Controller
         return view('AuthPackage::auth.forgot');
     }
 
-    public function sendResetLinkEmail(Request $request)
+    public function sendResetLinkEmail(SendResetLinkRequest $request)
     {
-        $request->validate(['email' => 'required|email']);
+        // Validated by SendResetLinkRequest
 
         // Throttle reset link sends per email+ip to avoid abuse
         $throttleKey = 'password-reset|' . Str::lower($request->input('email')) . '|' . $request->ip();
@@ -134,13 +131,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function resetPassword(Request $request)
+    public function resetPassword(ResetPasswordRequest $request)
     {
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed',
-        ]);
+        // Validated by ResetPasswordRequest
 
         $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) use ($request) {
             $user->password = Hash::make($password);
@@ -163,12 +156,10 @@ class AuthController extends Controller
         return view('AuthPackage::auth.confirm');
     }
 
-    public function confirmPassword(Request $request)
+    public function confirmPassword(ConfirmPasswordRequest $request)
     {
-        $request->validate([
-            'password' => 'required|string',
-        ]);
 
+        // Validated by ConfirmPasswordRequest
         $user = $request->user();
 
         if (! FacadesHash::check($request->password, $user->password)) {
