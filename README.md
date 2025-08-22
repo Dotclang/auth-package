@@ -26,9 +26,33 @@ Views are published under the `AuthPackage::auth.*` namespace. They are located 
 
 - Ensure mail is configured in the host app for password reset emails.
 - If you want the package routes to be available at the root (`/login`), the compatibility redirects are provided. Alternatively, you can publish and modify routes in your app.
-- Run `php artisan vendor:publish --tag=config` if you publish package config.
+- The package publishes a small config (`config/auth.php`) which exposes `password_timeout`. To publish it run:
+
+```bash
+# Publish package configuration only
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="auth-config"
+```
+
+Or publish views and config together with:
+
+```bash
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="views"
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="auth-config"
+```
+
+Note: the package merges its `config/auth.php` into your application's `auth` config so the `password_timeout` setting is available as `config('auth.password_timeout')`.
 
 ## Next steps
 
 - Add tests and optional email templates.
 - Add customization options for route prefixes and middleware.
+
+## Install command
+
+This package ships with a convenience command to publish views and configuration and to show Tailwind setup notes. To run it:
+
+```bash
+php artisan authpackage:install
+```
+
+Pass `--force` to overwrite previously published files.

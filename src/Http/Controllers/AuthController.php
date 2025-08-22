@@ -26,6 +26,7 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|string',
+            'remember' => 'nullable|boolean',
         ]);
 
         $throttleKey = Str::lower($request->input('email')).'|'.$request->ip();
@@ -38,7 +39,9 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        if (! Auth::attempt($credentials)) {
+        $attemptRemember = $request->boolean('remember');
+
+        if (! Auth::attempt($credentials, $attemptRemember)) {
             RateLimiter::hit($throttleKey, 60);
             return back()->withErrors(['email' => 'Invalid credentials'])->withInput($request->only('email'));
         }
@@ -47,7 +50,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/');
+    return redirect()->intended('/');
     }
 
     public function showRegister()
@@ -101,7 +104,22 @@ class AuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
+        // Throttle reset link sends per email+ip to avoid abuse
+        $throttleKey = 'password-reset|' . Str::lower($request->input('email')) . '|' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            return back()->withErrors(['email' => ['Too many requests. Please try again later.']]);
+        }
+
         $status = Password::sendResetLink($request->only('email'));
+
+        // If sending failed, count as an attempt to slow down abusive clients
+        if ($status !== Password::RESET_LINK_SENT) {
+            RateLimiter::hit($throttleKey, 60);
+        } else {
+            // clear on success
+            RateLimiter::clear($throttleKey);
+        }
 
         return $status === Password::RESET_LINK_SENT
             ? back()->with('status', __($status))

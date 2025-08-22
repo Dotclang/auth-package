@@ -23,7 +23,7 @@ class InstallCommand extends Command
         // Publish config (if exists)
         $this->callSilent('vendor:publish', [
             '--provider' => "Dotclang\AuthPackage\AuthServiceProvider",
-            '--tag' => 'config',
+            '--tag' => 'auth-config',
             '--force' => $this->option('force'),
         ]);
 
@@ -32,7 +32,7 @@ class InstallCommand extends Command
 
         // Tailwind note
         $this->line('');
-        $this->info('✅ Views and migrations published.');
+    $this->info('✅ Views and configuration published.');
         $this->warn('⚠️  Make sure TailwindCSS is installed in your project:');
         $this->line('   npm install -D tailwindcss postcss autoprefixer');
         $this->line('   npx tailwindcss init -p');
