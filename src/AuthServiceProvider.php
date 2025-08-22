@@ -2,9 +2,9 @@
 
 namespace Dotclang\AuthPackage;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends BaseServiceProvider
 {
     public function boot()
     {
@@ -19,7 +19,7 @@ class AuthServiceProvider extends ServiceProvider
 
         // Publish config
         $this->publishes([
-            __DIR__ . '/../config/auth.php' => config_path('auth.php'),
+            __DIR__ . '/../config/auth.php' => app()->configPath('auth.php'),
         ], 'config');
     }
 

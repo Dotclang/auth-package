@@ -3,15 +3,15 @@
 namespace Dotclang\AuthPackage\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     public function showLogin()
     {
-        return view('authpackage::auth.login');
+        return view('auth.login');
     }
 
     public function login(Request $request)
