@@ -31,7 +31,12 @@ class AuthServiceProvider extends BaseServiceProvider
 
     public function register()
     {
-    // Merge package auth config into host 'auth' config so auth.password_timeout is available
-    $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'auth');
+        // Merge package auth config into host 'auth' config so auth.password_timeout is available
+        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'auth');
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                \Dotclang\AuthPackage\Console\InstallCommand::class,
+            ]);
+        }
     }
 }
