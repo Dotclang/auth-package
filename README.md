@@ -29,6 +29,11 @@ Views are published under the `AuthPackage::auth.*` namespace. They are located 
 - The package publishes a small config (`config/auth.php`) which exposes `password_timeout`. To publish it run:
 
 ```bash
+# Install package
+composer require dotclang/auth-package
+```
+
+```bash
 # Publish package configuration only
 php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="auth-config"
 ```
