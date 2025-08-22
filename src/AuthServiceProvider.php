@@ -8,6 +8,12 @@ class AuthServiceProvider extends BaseServiceProvider
 {
     public function boot()
     {
+        // Register middleware alias
+        if ($this->app->resolved('router')) {
+            $router = $this->app->make('router');
+            $router->aliasMiddleware('password.confirmed', \Dotclang\AuthPackage\Http\Middleware\RequirePasswordConfirmed::class);
+        }
+
         // Load routes
         $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
 
@@ -17,15 +23,15 @@ class AuthServiceProvider extends BaseServiceProvider
         // Load views (if you want blade-based login)
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'AuthPackage');
 
-        // Publish config
+        // Publish config (merge into host app's auth config)
         $this->publishes([
             __DIR__ . '/../config/auth.php' => app()->configPath('auth.php'),
-        ], 'config');
+        ], 'auth-config');
     }
 
     public function register()
     {
-        // Merge config
-        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'AuthPackage');
+    // Merge package auth config into host 'auth' config so auth.password_timeout is available
+    $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'auth');
     }
 }
