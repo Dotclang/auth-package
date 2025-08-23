@@ -55,7 +55,8 @@ class PasswordController extends Controller
             $user->setRememberToken(Str::random(60));
             $user->save();
 
-            event(new Registered($user));
+            // Fire the framework PasswordReset event
+            event(new \Illuminate\Auth\Events\PasswordReset($user));
 
             Auth::login($user);
         });

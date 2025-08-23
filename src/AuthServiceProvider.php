@@ -23,6 +23,15 @@ class AuthServiceProvider extends BaseServiceProvider
         // Load views (if you want blade-based login)
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'AuthPackage');
 
+        // Publish views and migrations so host apps can customize them
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/AuthPackage'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'migrations');
+
         // Publish config (merge into host app's auth config)
         $this->publishes([
             __DIR__ . '/../config/auth.php' => app()->configPath('auth.php'),
