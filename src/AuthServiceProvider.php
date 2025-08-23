@@ -32,6 +32,13 @@ class AuthServiceProvider extends BaseServiceProvider
             __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'migrations');
 
+        // Publish front-end assets (CSS/JS/images) so host apps without Vite can publish them to public/
+        $this->publishes([
+            __DIR__.'/../resources/css' => public_path('vendor/Dotclang/auth-package/css'),
+            __DIR__.'/../resources/js' => public_path('vendor/Dotclang/auth-package/js'),
+            __DIR__.'/../resources/images' => public_path('vendor/Dotclang/auth-package/images'),
+        ], 'assets');
+
         // Publish config (merge into host app's auth config)
         $this->publishes([
             __DIR__.'/../config/auth.php' => app()->configPath('auth.php'),
@@ -40,8 +47,6 @@ class AuthServiceProvider extends BaseServiceProvider
 
     public function register(): void
     {
-        // Merge package auth config into host 'auth' config so auth.password_timeout is available
-        $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'auth');
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Dotclang\AuthPackage\Console\InstallCommand::class,

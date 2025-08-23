@@ -11,6 +11,11 @@ parameters:
     # Level 10 is the highest level
     level: 7
 
+    # Don't fail the analysis if an ignoreError pattern doesn't match any reported
+    # errors. This is helpful for package development where messages may vary
+    # between framework versions or environments.
+    reportUnmatchedIgnoredErrors: false
+
     ignoreErrors:
         - '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
 #

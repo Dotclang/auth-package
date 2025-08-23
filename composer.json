@@ -1,49 +1,50 @@
 {
-    "name": "dotclang/auth-package",
-    "description": "Custom authentication Laravel with Tailwind UI",
-    "license": "MIT",
-    "type": "library",
-    "autoload": {
-        "psr-4": {
-            "Dotclang\\AuthPackage\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Edy Ridwan Hutagalung"
-        }
-    ],
-    "minimum-stability": "dev",
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Dotclang\\AuthPackage\\AuthServiceProvider"
-            ]
-        }
-    },
-    "require": {
-        "php": "^8.4",
-        "laravel/framework": "^10.0|^11.0|^12.0"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/Dotclang/auth-package.git"
-        }
-    ],
-    "autoload-dev": {
-        "psr-4": {
-            "Dotclang\\AuthPackage\\": "src/",
-            "Dotclang\\AuthPackage\\Database\\Factories\\": "database/factories/"
-        }
-    },
-    "scripts": {
-        "lint:phpstan": "phpstan analyse -c phpstan.neon.dist --no-progress",
-        "lint:pint": "pint",
-        "lint": "composer run-script lint:pint && composer run-script lint:phpstan"
-    },
-    "require-dev": {
-        "larastan/larastan": "^3.0",
-        "laravel/pint": "dev-main"
+  "name": "dotclang/auth-package",
+  "description": "Custom authentication Laravel with Tailwind UI",
+  "license": "MIT",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Dotclang\\AuthPackage\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Edy Ridwan Hutagalung"
+    }
+  ],
+  "minimum-stability": "dev",
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Dotclang\\AuthPackage\\AuthServiceProvider"
+      ]
+    }
+  },
+  "require": {
+    "php": "^8.4",
+    "laravel/framework": "^10.0|^11.0|^12.0"
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Dotclang/auth-package.git"
+    }
+  ],
+  "autoload-dev": {
+    "psr-4": {
+      "Dotclang\\AuthPackage\\": "src/",
+      "Dotclang\\AuthPackage\\Database\\Factories\\": "database/factories/"
+    }
+  },
+  "scripts": {
+    "lint:phpstan": "phpstan analyse -c phpstan.neon.dist --no-progress",
+    "lint:pint": "pint",
+    "lint:js": "npm run lint",
+    "lint": "composer run-script lint:js && composer run-script lint:pint && composer run-script lint:phpstan"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "dev-main"
+  }
 }
