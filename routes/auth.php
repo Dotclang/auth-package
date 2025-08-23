@@ -6,6 +6,7 @@ use Dotclang\AuthPackage\Http\Controllers\Auth\RegisterController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\ConfirmPasswordController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\LogoutController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\DashboardController;
 
 Route::middleware('web')->prefix('auth')->name('auth.')->group(function () {
     // Authentication
