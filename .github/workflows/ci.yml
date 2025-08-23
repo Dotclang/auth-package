@@ -26,6 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --no-interaction --no-progress --prefer-dist
+          npm install
 
       - name: Run PHPStan (Larastan)
         run: composer run-script lint
