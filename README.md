@@ -47,11 +47,6 @@ php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvide
 
 Note: the package merges its `config/auth.php` into your application's `auth` config so the `password_timeout` setting is available as `config('auth.password_timeout')`.
 
-## Next steps
-
-- Add tests and optional email templates.
-- Add customization options for route prefixes and middleware.
-
 ## Install command
 
 This package ships with a convenience command to publish views and configuration and to show Tailwind setup notes. To run it:
