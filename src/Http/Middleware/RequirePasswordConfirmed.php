@@ -10,8 +10,6 @@ class RequirePasswordConfirmed
     /**
      * Handle an incoming request and ensure password was recently confirmed.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
      * @param  int|null  $timeout
      * @return mixed
      */

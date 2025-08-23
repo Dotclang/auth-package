@@ -1,12 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Dotclang\AuthPackage\Http\Controllers\Auth\LoginController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\RegisterController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\ConfirmPasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\LoginController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\LogoutController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\DashboardController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\RegisterController;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware('web')->prefix('auth')->name('auth.')->group(function () {
     // Authentication
@@ -35,6 +34,8 @@ Route::middleware('web')->group(function () {
     Route::get('register', fn () => redirect()->route('auth.register'))->name('register');
 
     Route::get('password/reset', fn () => redirect()->route('auth.password.request'))->name('password.request');
-    Route::get('password/reset/{token}', function ($token) { return redirect()->route('auth.password.reset', $token); })->name('password.reset');
+    Route::get('password/reset/{token}', function ($token) {
+        return redirect()->route('auth.password.reset', $token);
+    })->name('password.reset');
     Route::get('password/confirm', fn () => redirect()->route('auth.password.confirm'))->name('password.confirm');
 });

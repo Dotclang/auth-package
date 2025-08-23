@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class AuthServiceProvider extends BaseServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         // Register middleware alias
         if ($this->app->resolved('router')) {
@@ -15,33 +15,33 @@ class AuthServiceProvider extends BaseServiceProvider
         }
 
         // Load routes
-        $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
 
         // Load migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Load views (if you want blade-based login)
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'AuthPackage');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'AuthPackage');
 
         // Publish views and migrations so host apps can customize them
         $this->publishes([
-            __DIR__ . '/../resources/views' => resource_path('views/vendor/AuthPackage'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/AuthPackage'),
         ], 'views');
 
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'migrations');
 
         // Publish config (merge into host app's auth config)
         $this->publishes([
-            __DIR__ . '/../config/auth.php' => app()->configPath('auth.php'),
+            __DIR__.'/../config/auth.php' => app()->configPath('auth.php'),
         ], 'auth-config');
     }
 
-    public function register()
+    public function register(): void
     {
         // Merge package auth config into host 'auth' config so auth.password_timeout is available
-        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'auth');
+        $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'auth');
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Dotclang\AuthPackage\Console\InstallCommand::class,

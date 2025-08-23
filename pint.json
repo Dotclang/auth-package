@@ -1,0 +1,22 @@
+{
+    "preset": "laravel",
+    "exclude": [
+        "vendor",
+        "storage",
+        "bootstrap/cache",
+        "node_modules"
+    ],
+    "paths": [
+        "src",
+        "routes",
+        "config",
+        "resources/views",
+        "tests",
+        "bootstrap"
+    ],
+    "rules": {
+        "array_syntax": { "syntax": "short" },
+        "no_unused_imports": true,
+        "single_line_throw": true
+    }
+}

@@ -7,9 +7,10 @@ use Illuminate\Console\Command;
 class InstallCommand extends Command
 {
     protected $signature = 'authpackage:install {--force : Overwrite existing files}';
+
     protected $description = 'Install the AuthPackage (views, migrations, Tailwind setup)';
 
-    public function handle()
+    public function handle(): int
     {
         $this->info('⚡ Installing AuthPackage...');
 
@@ -32,7 +33,7 @@ class InstallCommand extends Command
 
         // Tailwind note
         $this->line('');
-    $this->info('✅ Views and configuration published.');
+        $this->info('✅ Views and configuration published.');
         $this->warn('⚠️  Make sure TailwindCSS is installed in your project:');
         $this->line('   npm install -D tailwindcss postcss autoprefixer');
         $this->line('   npx tailwindcss init -p');

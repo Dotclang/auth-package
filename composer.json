@@ -1,6 +1,7 @@
 {
     "name": "dotclang/auth-package",
     "description": "Custom authentication Laravel with Tailwind UI",
+    "license": "MIT",
     "type": "library",
     "autoload": {
         "psr-4": {
@@ -21,7 +22,7 @@
         }
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "laravel/framework": "^10.0|^11.0|^12.0"
     },
     "repositories": [
@@ -32,15 +33,17 @@
     ],
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Dotclang\\AuthPackage\\": "src/",
+            "Dotclang\\AuthPackage\\Database\\Factories\\": "database/factories/"
         }
     },
     "scripts": {
-        "test": "pest"
+        "lint:phpstan": "phpstan analyse -c phpstan.neon.dist --no-progress",
+        "lint:pint": "pint",
+        "lint": "composer run-script lint:pint && composer run-script lint:phpstan"
     },
-    "config": {
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        }
+    "require-dev": {
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "dev-main"
     }
 }

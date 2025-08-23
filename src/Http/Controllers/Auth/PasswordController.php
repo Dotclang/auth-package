@@ -2,26 +2,33 @@
 
 namespace Dotclang\AuthPackage\Http\Controllers\Auth;
 
-use Dotclang\AuthPackage\Http\Requests\SendResetLinkRequest;
 use Dotclang\AuthPackage\Http\Requests\ResetPasswordRequest;
+use Dotclang\AuthPackage\Http\Requests\SendResetLinkRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class PasswordController extends Controller
 {
-    public function showForgotPassword()
+    /**
+     * Show the form to request a password reset link.
+     */
+    public function showForgotPassword(): View
     {
         return view('AuthPackage::auth.forgot');
     }
 
-    public function sendResetLinkEmail(SendResetLinkRequest $request)
+    /**
+     * Handle a password reset link email request.
+     */
+    public function sendResetLinkEmail(SendResetLinkRequest $request): RedirectResponse
     {
-        $throttleKey = 'password-reset|' . Str::lower($request->input('email')) . '|' . $request->ip();
+        $throttleKey = 'password-reset|'.Str::lower($request->input('email')).'|'.$request->ip();
 
         if (RateLimiter::tooManyAttempts($throttleKey, 3)) {
             return back()->withErrors(['email' => ['Too many requests. Please try again later.']]);
@@ -40,15 +47,23 @@ class PasswordController extends Controller
             : back()->withErrors(['email' => __($status)]);
     }
 
-    public function showResetForm($token = null)
+    /**
+     * Show the password reset form.
+     */
+    public function showResetForm(?string $token = null): View
     {
+        $email = is_string(request()->email) ? request()->email : null;
+
         return view('AuthPackage::auth.reset')->with([
             'token' => $token,
-            'email' => request()->email,
+            'email' => $email,
         ]);
     }
 
-    public function resetPassword(ResetPasswordRequest $request)
+    /**
+     * Handle a password reset request.
+     */
+    public function resetPassword(ResetPasswordRequest $request): RedirectResponse
     {
         $status = Password::reset($request->only('email', 'password', 'password_confirmation', 'token'), function ($user, $password) {
             $user->password = Hash::make($password);

@@ -2,15 +2,15 @@
 
 namespace Dotclang\AuthPackage\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Show the dashboard.
      */
-    public function __invoke(Request $request)
+    public function __invoke(): View
     {
         return view('AuthPackage::dashboard');
     }

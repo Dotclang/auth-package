@@ -2,27 +2,38 @@
 
 namespace Dotclang\AuthPackage\Http\Controllers\Auth;
 
-use Dotclang\AuthPackage\Http\Requests\ConfirmPasswordRequest;
+use Dotclang\AuthPackage\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Hash as FacadesHash;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class ConfirmPasswordController extends Controller
 {
-    public function showConfirmPassword()
+    /**
+     * Show the password confirmation form.
+     */
+    public function showConfirmPassword(): View
     {
         return view('AuthPackage::auth.confirm');
     }
 
-    public function confirmPassword(ConfirmPasswordRequest $request)
+    /**
+     * Confirm the user's password.
+     */
+    public function store(Request $request): RedirectResponse
     {
+        /** @var User|null $user */
         $user = $request->user();
 
-        if (! FacadesHash::check($request->password, $user->password)) {
-            return back()->withErrors(['password' => 'The provided password does not match our records.']);
+        if (! $user || ! Hash::check($request->password, $user->getAuthPassword())) {
+            throw ValidationException::withMessages(['password' => __('auth.password')]);
         }
 
         $request->session()->put('auth.password_confirmed_at', time());
 
-        return redirect()->intended('/');
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 }
