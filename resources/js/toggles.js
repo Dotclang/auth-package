@@ -5,10 +5,10 @@
   function init() {
     var darkToggle = document.getElementById('darkModeToggle');
     // optional element for showing an emoji/icon inside the toggle (not required)
-    var darkIcon = null;
+    var darkIcon = document.getElementById('darkModeIcon');
     var sidebarToggle = document.getElementById('sidebarToggle');
     var sidebar = document.getElementById('sidebar');
-  var sidebarKey = 'sidebarHidden';
+    var sidebarKey = 'sidebarHidden';
     var profileMenuButton = document.getElementById('profileMenuButton');
     var profileMenu = document.getElementById('profileMenu');
 
@@ -23,7 +23,9 @@
       } else {
         // auto: follow prefers-color-scheme
         try {
-          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var prefersDark = window.matchMedia(
+            '(prefers-color-scheme: dark)',
+          ).matches;
           if (prefersDark) document.documentElement.classList.add('dark');
           else document.documentElement.classList.remove('dark');
         } catch (e) {
@@ -32,13 +34,23 @@
       }
       // Update aria-pressed to indicate whether dark is active
       if (darkToggle)
-        darkToggle.setAttribute('aria-pressed', document.documentElement.classList.contains('dark') ? 'true' : 'false');
+        darkToggle.setAttribute(
+          'aria-pressed',
+          document.documentElement.classList.contains('dark')
+            ? 'true'
+            : 'false',
+        );
       // Update label text
       if (darkLabel) {
-        var labelText = mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light';
+        var labelText =
+          mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light';
         darkLabel.textContent = labelText;
       }
-      if (darkIcon) darkIcon.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+      if (darkIcon) {
+        if (mode === 'auto') darkIcon.textContent = '🌓';
+        else if (mode === 'dark') darkIcon.textContent = '🌙';
+        else darkIcon.textContent = '☀️';
+      }
     }
 
     // initialize from storage
@@ -74,8 +86,10 @@
         darkToggle.setAttribute('aria-expanded', 'false');
         // restore focus to the toggle to avoid hidden element retaining focus
         try {
-          if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
-          else if (darkToggle && typeof darkToggle.focus === 'function') darkToggle.focus();
+          if (lastFocused && typeof lastFocused.focus === 'function')
+            lastFocused.focus();
+          else if (darkToggle && typeof darkToggle.focus === 'function')
+            darkToggle.focus();
         } catch (e) {}
       }
 
@@ -87,7 +101,9 @@
       });
 
       // handle option clicks inside the menu
-      var themeOptions = themeMenu ? themeMenu.querySelectorAll('[data-theme-option]') : [];
+      var themeOptions = themeMenu
+        ? themeMenu.querySelectorAll('[data-theme-option]')
+        : [];
       themeOptions.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
           var choice = btn.getAttribute('data-theme-option');
@@ -140,7 +156,9 @@
           sidebarToggle.setAttribute('aria-expanded', 'true');
         } else {
           // If nothing stored, ensure aria reflects current DOM
-          var expanded = sidebar.classList.contains('hidden') ? 'false' : 'true';
+          var expanded = sidebar.classList.contains('hidden')
+            ? 'false'
+            : 'true';
           sidebarToggle.setAttribute('aria-expanded', expanded);
         }
       } catch (e) {}

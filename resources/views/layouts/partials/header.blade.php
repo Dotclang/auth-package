@@ -18,13 +18,10 @@
 
             <div class="flex items-center gap-4">
                 <div class="relative">
-                    <button id="darkModeToggle" type="button" aria-pressed="false" aria-controls="themeMenu" aria-expanded="false" aria-live="polite"
+                    <button id="darkModeToggle" type="button" aria-pressed="false" aria-controls="themeMenu"
+                        aria-expanded="false" aria-live="polite"
                         class="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 3v1m0 16v1m8.66-9H21M3 12H4.34M17.66 6.34l.7.7M6.64 17.36l.7.7M17.66 17.66l.7-.7M6.64 6.64l.7-.7">
-                            </path>
-                        </svg>
+                        <span id="darkModeIcon" class="text-lg" aria-hidden="true">🌓</span>
                         <span id="darkModeLabel" class="sr-only sm:inline text-sm">Auto</span>
                     </button>
 
