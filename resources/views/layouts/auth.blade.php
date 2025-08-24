@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="antialiased">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark antialiased">
 
 <head>
     <meta charset="utf-8">
@@ -16,8 +16,7 @@
             class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden grid grid-cols-1 md:grid-cols-2">
             <div class="p-6 md:p-10">
                 <div class="flex items-center justify-center mb-6">
-                    <img src="{{ asset('vendor/Dotclang/auth-package/images/logo.svg') }}" alt="AuthPackage"
-                        class="h-12 w-12" />
+                    <img src="{{ asset('img/logo.svg') }}" alt="AuthPackage" class="h-12 w-12" />
                 </div>
 
                 @if (session('status'))
@@ -38,8 +37,7 @@
             </div>
 
             <div class="hidden md:flex items-center justify-center bg-indigo-50 dark:bg-gray-700 p-6">
-                <img src="{{ asset('vendor/Dotclang/auth-package/images/auth-illustration.svg') }}" alt="Illustration"
-                    class="max-h-64 w-auto" />
+                <img src="{{ asset('img/auth-illustration.svg') }}" alt="Illustration" class="max-h-64 w-auto" />
             </div>
         </div>
     </div>

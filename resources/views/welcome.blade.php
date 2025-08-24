@@ -6,7 +6,7 @@
     <header class="mb-8">
         <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="{{ asset('vendor/Dotclang/auth-package/images/logo.svg') }}" alt="Logo" class="h-10 w-10" />
+                <img src="{{ asset('img/logo.svg') }}" alt="Logo" class="h-10 w-10" />
                 <h1 class="text-xl font-semibold">AuthPackage</h1>
             </div>
 
@@ -36,8 +36,7 @@
             </div>
 
             <div class="hidden md:block">
-                <img src="{{ asset('vendor/Dotclang/auth-package/images/office-illustration.svg') }}" alt="Office"
-                    class="w-full h-auto" />
+                <img src="{{ asset('img/office-illustration.svg') }}" alt="Office" class="w-full h-auto" />
             </div>
         </div>
     </section>
