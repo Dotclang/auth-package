@@ -27,7 +27,7 @@
                 <div class="relative">
                     <button id="profileMenuButton" type="button" aria-expanded="false" aria-controls="profileMenu"
                         class="flex items-center gap-2 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <img src="{{ asset('img/logo.svg') }}" alt="avatar" class="h-8 w-8 rounded-full" />
+                        <img src="{{ class_exists(\Illuminate\Support\Facades\Vite::class) ? Vite::asset('resources/img/logo.svg') : asset('vendor/Dotclang/auth-package/img/logo.svg') }}" alt="avatar" class="h-8 w-8 rounded-full" />
                         <span class="hidden sm:inline text-sm">Account</span>
                     </button>
                     <!-- Simple dropdown -->

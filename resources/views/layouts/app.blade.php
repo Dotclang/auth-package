@@ -6,35 +6,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title', 'AuthPackage')</title>
     {{-- Small inline script to install initial theme before CSS loads (prevents flash) --}}
-    <script>
-        (function () {
-            try {
-                var theme = localStorage.getItem('theme');
-                if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                } else if (theme === 'light') {
-                    document.documentElement.classList.remove('dark');
-                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
-            } catch (e) {}
-        })();
-    </script>
     @if (class_exists(\Illuminate\Support\Facades\Vite::class))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif
 </head>
 
 <body class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-    @include('AuthPackage::layouts.partials.header')
-
     <div class="min-h-screen flex">
         @include('AuthPackage::layouts.partials.sidebar')
 
-        <main class="flex-1 p-6">
-            <div class="max-w-6xl mx-auto">
+        <div class="flex-1 flex flex-col min-h-screen">
+            @include('AuthPackage::layouts.partials.header')
+
+            <main class="flex-1 p-6">
+                <div class="max-w-6xl mx-auto">
                 @if (session('status'))
                     <div class="mb-4 text-sm text-green-600">{{ session('status') }}</div>
                 @endif
@@ -52,9 +37,9 @@
                 @yield('content')
             </div>
         </main>
-    </div>
 
-    @include('AuthPackage::layouts.partials.footer')
+            @include('AuthPackage::layouts.partials.footer')
+        </div>
 </body>
 
 </html>
