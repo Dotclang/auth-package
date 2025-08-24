@@ -1,4 +1,4 @@
-@extends('AuthPackage::layouts.app')
+@extends('AuthPackage::layouts.auth')
 
 @section('title', 'Verify Email')
 

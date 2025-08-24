@@ -4,21 +4,39 @@
 
 - Project type: Laravel package (PSR-12 namespaced under `Dotclang\AuthPackage`) intended to be installed via Composer into host Laravel applications.
 
-- using validation requests: leverage Laravel's form request validation for incoming data instead of manual validation in controllers.
+- using validation requests classes: leverage Laravel's form request validation for incoming data instead of manual validation in controllers.
 
 - using route middleware: apply middleware from routes files instead of controllers for common tasks (e.g., authentication, authorization).
 
+- using helper functions: leverage Laravel's helper functions for common tasks (e.g., `route()`, `url()`, `asset()`).
+
 - UI design requirements (keep these in mind when editing views)
   - Mobile-first: design templates with responsive Tailwind utilities
-  - Dark mode: support Tailwind's `dark:` variants (assume host app may enable `class`-based dark mode).
+  - Dark mode: support Tailwind's `dark:` variants for dark mode compatibility
+    - use `dark:` variants for colors and backgrounds
   - functional components: build reusable Blade components for common UI patterns (e.g., buttons, forms, modals).
   - use function vendors: leverage community-driven Blade component libraries for common UI elements.
+
+- `resources/views/welcome.blade.php` — welcome page (landing page)
+  - this page about company profile
+  - have a header, hero section, features section, testimonials section, and footer
+- `resources/views/layouts/app.blade.php` — main layout template for non-auth pages
+  - have a header, sidebar, and footer
+    - header : `resources/views/layouts/partials/header.blade.php`
+      - have toggle for hide sidebar
+      - have toggle for dark mode
+      - have search input
+      - have user profile menu with dropdown
+    - sidebar : `resources/views/layouts/partials/sidebar.blade.php`
+      - have app name & logo
+      - have links to dashboard, settings, and logout
+    - footer : `resources/views/layouts/partials/footer.blade.php`
+- `resources/views/layouts/auth.blade.php` — layout template for auth pages
 
 - Files to inspect when implementing changes
   - `src/Console/InstallCommand.php` — Artisan command for package installation
   - `src/AuthServiceProvider.php` — provider entrypoints
   - `routes/auth.php` and `routes/web.php` — route definitions and names
-  - `src/Http/Controllers/Auth/*` and `src/Http/Requests/*` — request handlers and validation
   - `resources/views/*` — Blade templates (Tailwind classes)
   - `config/auth.php` — package config merged into host `auth` config
   - `src/js` — JavaScript assets (Tailwind classes)

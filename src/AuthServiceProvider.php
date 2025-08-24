@@ -15,11 +15,9 @@ class AuthServiceProvider extends BaseServiceProvider
             $router->aliasMiddleware('password.confirmed', \Dotclang\AuthPackage\Http\Middleware\RequirePasswordConfirmed::class);
         }
 
-        // Load routes
+        // Load package web and auth routes
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
-
-        // Load migrations
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Load views (if you want blade-based login)
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'AuthPackage');
