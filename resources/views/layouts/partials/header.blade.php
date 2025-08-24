@@ -2,7 +2,8 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
             <div class="flex items-center gap-4">
-                <button id="sidebarToggle" type="button" aria-expanded="true" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button id="sidebarToggle" type="button" aria-expanded="true"
+                    class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M4 6h16M4 12h16M4 18h16"></path>
@@ -16,7 +17,8 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button id="darkModeToggle" type="button" aria-pressed="false" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button id="darkModeToggle" type="button" aria-pressed="false"
+                    class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 3v1m0 16v1m8.66-9H21M3 12H4.34M17.66 6.34l.7.7M6.64 17.36l.7.7M17.66 17.66l.7-.7M6.64 6.64l.7-.7">
@@ -27,7 +29,8 @@
                 <div class="relative">
                     <button id="profileMenuButton" type="button" aria-expanded="false" aria-controls="profileMenu"
                         class="flex items-center gap-2 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <img src="{{ class_exists(\Illuminate\Support\Facades\Vite::class) ? Vite::asset('resources/img/logo.svg') : asset('vendor/Dotclang/auth-package/img/logo.svg') }}" alt="avatar" class="h-8 w-8 rounded-full" />
+                        <img src="{{ class_exists(\Illuminate\Support\Facades\Vite::class) ? Vite::asset('resources/img/logo.svg') : asset('vendor/Dotclang/auth-package/img/logo.svg') }}"
+                            alt="avatar" class="h-8 w-8 rounded-full" />
                         <span class="hidden sm:inline text-sm">Account</span>
                     </button>
                     <!-- Simple dropdown -->

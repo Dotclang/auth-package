@@ -20,23 +20,23 @@
 
             <main class="flex-1 p-6">
                 <div class="max-w-6xl mx-auto">
-                @if (session('status'))
-                    <div class="mb-4 text-sm text-green-600">{{ session('status') }}</div>
-                @endif
+                    @if (session('status'))
+                        <div class="mb-4 text-sm text-green-600">{{ session('status') }}</div>
+                    @endif
 
-                @if ($errors->any())
-                    <div class="mb-4">
-                        <ul class="text-sm text-red-600 list-disc list-inside">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                    @if ($errors->any())
+                        <div class="mb-4">
+                            <ul class="text-sm text-red-600 list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                @yield('content')
-            </div>
-        </main>
+                    @yield('content')
+                </div>
+            </main>
 
             @include('AuthPackage::layouts.partials.footer')
         </div>

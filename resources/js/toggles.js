@@ -13,7 +13,8 @@
 
     function updateDarkUI() {
       var isDark = document.documentElement.classList.contains('dark');
-      if (darkToggle) darkToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      if (darkToggle)
+        darkToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
       if (darkIcon) darkIcon.textContent = isDark ? '☀️' : '🌙';
     }
 
@@ -46,15 +47,15 @@
     // Profile menu toggle + accessibility (close on outside click / Escape)
     if (profileMenuButton && profileMenu) {
       function closeProfileMenu() {
-  profileMenu.classList.add('hidden');
-  profileMenu.setAttribute('aria-hidden', 'true');
-  profileMenuButton.setAttribute('aria-expanded', 'false');
+        profileMenu.classList.add('hidden');
+        profileMenu.setAttribute('aria-hidden', 'true');
+        profileMenuButton.setAttribute('aria-expanded', 'false');
       }
 
       function openProfileMenu() {
-  profileMenu.classList.remove('hidden');
-  profileMenu.setAttribute('aria-hidden', 'false');
-  profileMenuButton.setAttribute('aria-expanded', 'true');
+        profileMenu.classList.remove('hidden');
+        profileMenu.setAttribute('aria-hidden', 'false');
+        profileMenuButton.setAttribute('aria-expanded', 'true');
       }
 
       profileMenuButton.addEventListener('click', function (e) {
@@ -68,7 +69,10 @@
 
       // Close when clicking outside
       document.addEventListener('click', function (e) {
-        if (!profileMenu.contains(e.target) && !profileMenuButton.contains(e.target)) {
+        if (
+          !profileMenu.contains(e.target) &&
+          !profileMenuButton.contains(e.target)
+        ) {
           closeProfileMenu();
         }
       });
