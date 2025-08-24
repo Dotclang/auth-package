@@ -9,7 +9,7 @@
 - using route middleware: apply middleware from routes files instead of controllers for common tasks (e.g., authentication, authorization).
 
 - UI design requirements (keep these in mind when editing views)
-  - Mobile-first: design templates with responsive Tailwind utilities 
+  - Mobile-first: design templates with responsive Tailwind utilities
   - Dark mode: support Tailwind's `dark:` variants (assume host app may enable `class`-based dark mode).
   - functional components: build reusable Blade components for common UI patterns (e.g., buttons, forms, modals).
   - use function vendors: leverage community-driven Blade component libraries for common UI elements.

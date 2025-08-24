@@ -2,6 +2,7 @@
 
 namespace Dotclang\AuthPackage;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider as BaseServiceProvider;
 
 class AuthServiceProvider extends BaseServiceProvider
@@ -27,10 +28,6 @@ class AuthServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__.'/../resources/views' => resource_path('views/vendor/AuthPackage'),
         ], 'views');
-
-        $this->publishes([
-            __DIR__.'/../database/migrations' => database_path('migrations'),
-        ], 'migrations');
 
         // Publish front-end assets (CSS/JS/images) so host apps without Vite can publish them to public/
         $this->publishes([
