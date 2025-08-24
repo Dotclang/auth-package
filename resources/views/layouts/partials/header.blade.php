@@ -56,7 +56,7 @@
                     <!-- Simple dropdown -->
                     <div id="profileMenu" role="menu" aria-hidden="true"
                         class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border rounded-md py-1">
-                        <a href="#"
+                        <a href="{{ route('profile') }}"
                             class="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Profile</a>
                         <a href="#"
                             class="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">Settings</a>
