@@ -15,7 +15,8 @@
       var isDark = document.documentElement.classList.contains('dark');
       if (darkToggle)
         darkToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-      if (darkIcon) darkIcon.textContent = isDark ? '\u2600\ufe0f' : '\ud83c\udf19';
+      if (darkIcon)
+        darkIcon.textContent = isDark ? '\u2600\ufe0f' : '\ud83c\udf19';
     }
 
     try {

@@ -17,7 +17,7 @@
   - functional components: build reusable Blade components for common UI patterns (e.g., buttons, forms, modals).
   - use function vendors: leverage community-driven Blade component libraries for common UI elements.
 
-- `resources/views/welcome.blade.php` — welcome page (landing page)
+- `resources/views/welcome.blade.php` — Single page application (SPA) welcome page
   - this page about company profile
   - have a header, hero section, features section, testimonials section, and footer
 - `resources/views/layouts/app.blade.php` — main layout template for non-auth pages
