@@ -1,10 +1,27 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark antialiased">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="antialiased">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title', 'AuthPackage')</title>
+    {{-- Small inline script to install initial theme before CSS loads (prevents flash) --}}
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme');
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                } else if (theme === 'light') {
+                    document.documentElement.classList.remove('dark');
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            } catch (e) {}
+        })();
+    </script>
     @if (class_exists(\Illuminate\Support\Facades\Vite::class))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     @endif

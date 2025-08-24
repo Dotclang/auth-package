@@ -4,25 +4,17 @@
 
   function init() {
     var darkToggle = document.getElementById('darkModeToggle');
+    // optional element for showing an emoji/icon inside the toggle (not required)
+    var darkIcon = null;
     var sidebarToggle = document.getElementById('sidebarToggle');
     var sidebar = document.getElementById('sidebar');
+    var profileMenuButton = document.getElementById('profileMenuButton');
+    var profileMenu = document.getElementById('profileMenu');
 
     function updateDarkUI() {
-      if (document.documentElement.classList.contains('dark')) {
-        darkToggle && darkToggle.setAttribute('aria-pressed', 'true');
-      } else {
-        darkToggle && darkToggle.setAttribute('aria-pressed', 'false');
-      }
-    }
-
-    function updateDarkIcon() {
-      if (document.documentElement.classList.contains('dark')) {
-        darkIcon && (darkIcon.textContent = '☀️');
-        darkToggle && darkToggle.setAttribute('aria-pressed', 'true');
-      } else {
-        darkIcon && (darkIcon.textContent = '🌙');
-        darkToggle && darkToggle.setAttribute('aria-pressed', 'false');
-      }
+      var isDark = document.documentElement.classList.contains('dark');
+      if (darkToggle) darkToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      if (darkIcon) darkIcon.textContent = isDark ? '☀️' : '🌙';
     }
 
     try {
@@ -48,6 +40,42 @@
         sidebar.classList.toggle('hidden');
         var expanded = sidebar.classList.contains('hidden') ? 'false' : 'true';
         sidebarToggle.setAttribute('aria-expanded', expanded);
+      });
+    }
+
+    // Profile menu toggle + accessibility (close on outside click / Escape)
+    if (profileMenuButton && profileMenu) {
+      function closeProfileMenu() {
+  profileMenu.classList.add('hidden');
+  profileMenu.setAttribute('aria-hidden', 'true');
+  profileMenuButton.setAttribute('aria-expanded', 'false');
+      }
+
+      function openProfileMenu() {
+  profileMenu.classList.remove('hidden');
+  profileMenu.setAttribute('aria-hidden', 'false');
+  profileMenuButton.setAttribute('aria-expanded', 'true');
+      }
+
+      profileMenuButton.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (profileMenu.classList.contains('hidden')) {
+          openProfileMenu();
+        } else {
+          closeProfileMenu();
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener('click', function (e) {
+        if (!profileMenu.contains(e.target) && !profileMenuButton.contains(e.target)) {
+          closeProfileMenu();
+        }
+      });
+
+      // Close on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeProfileMenu();
       });
     }
   }
