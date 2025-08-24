@@ -7,7 +7,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Top-level dashboard: show package dashboard (protected by auth)
-Route::middleware(['web', 'auth'])->get('dashboard', DashboardController::class)->name('dashboard');
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+});
 
 require __DIR__.'/auth.php';

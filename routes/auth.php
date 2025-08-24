@@ -1,41 +1,61 @@
 <?php
 
-use Dotclang\AuthPackage\Http\Controllers\Auth\ConfirmPasswordController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\LoginController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\LogoutController;
 use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
-use Dotclang\AuthPackage\Http\Controllers\Auth\RegisterController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\AuthenticatedSessionController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\ConfirmablePasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\EmailVerificationNotificationController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\EmailVerificationPromptController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\NewPasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\PasswordResetLinkController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\RegisteredUserController;
+use Dotclang\AuthPackage\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('web')->prefix('auth')->name('auth.')->group(function () {
-    // Authentication
-    Route::get('login', [LoginController::class, 'showLogin'])->name('login');
-    Route::post('login', [LoginController::class, 'login'])->name('login.attempt');
 
-    Route::get('register', [RegisterController::class, 'showRegister'])->name('register');
-    Route::post('register', [RegisterController::class, 'register'])->name('register.attempt');
+Route::middleware('guest')->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
 
-    // Password reset
-    Route::get('password/reset', [PasswordController::class, 'showForgotPassword'])->name('password.request');
-    Route::post('password/email', [PasswordController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('throttle:6,1');
-    Route::get('password/reset/{token}', [PasswordController::class, 'showResetForm'])->name('password.reset');
-    Route::post('password/reset', [PasswordController::class, 'resetPassword'])->name('password.update');
+    Route::post('register', [RegisteredUserController::class, 'store']);
 
-    // Confirm password (requires auth)
-    Route::get('password/confirm', [ConfirmPasswordController::class, 'showConfirmPassword'])->name('password.confirm')->middleware('auth');
-    Route::post('password/confirm', [ConfirmPasswordController::class, 'confirmPassword'])->name('password.confirm.post')->middleware('auth');
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
 
-    Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
 });
 
-// Compatibility: redirect common unprefixed routes to package-prefixed routes
-Route::middleware('web')->group(function () {
-    Route::get('login', fn () => redirect()->route('auth.login'))->name('login');
-    Route::get('register', fn () => redirect()->route('auth.register'))->name('register');
+Route::middleware('auth')->group(function () {
+    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
+        ->name('verification.notice');
 
-    Route::get('password/reset', fn () => redirect()->route('auth.password.request'))->name('password.request');
-    Route::get('password/reset/{token}', function ($token) {
-        return redirect()->route('auth.password.reset', $token);
-    })->name('password.reset');
-    Route::get('password/confirm', fn () => redirect()->route('auth.password.confirm'))->name('password.confirm');
+    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
 });
