@@ -8,6 +8,7 @@
     var darkIcon = null;
     var sidebarToggle = document.getElementById('sidebarToggle');
     var sidebar = document.getElementById('sidebar');
+  var sidebarKey = 'sidebarHidden';
     var profileMenuButton = document.getElementById('profileMenuButton');
     var profileMenu = document.getElementById('profileMenu');
 
@@ -37,10 +38,29 @@
     }
 
     if (sidebarToggle && sidebar) {
+      // Initialize sidebar visibility from localStorage
+      try {
+        var stored = localStorage.getItem(sidebarKey);
+        if (stored === 'true') {
+          sidebar.classList.add('hidden');
+          sidebarToggle.setAttribute('aria-expanded', 'false');
+        } else if (stored === 'false') {
+          sidebar.classList.remove('hidden');
+          sidebarToggle.setAttribute('aria-expanded', 'true');
+        } else {
+          // If nothing stored, ensure aria reflects current DOM
+          var expanded = sidebar.classList.contains('hidden') ? 'false' : 'true';
+          sidebarToggle.setAttribute('aria-expanded', expanded);
+        }
+      } catch (e) {}
+
       sidebarToggle.addEventListener('click', function () {
-        sidebar.classList.toggle('hidden');
-        var expanded = sidebar.classList.contains('hidden') ? 'false' : 'true';
+        var nowHidden = sidebar.classList.toggle('hidden');
+        var expanded = nowHidden ? 'false' : 'true';
         sidebarToggle.setAttribute('aria-expanded', expanded);
+        try {
+          localStorage.setItem(sidebarKey, nowHidden ? 'true' : 'false');
+        } catch (e) {}
       });
     }
 
