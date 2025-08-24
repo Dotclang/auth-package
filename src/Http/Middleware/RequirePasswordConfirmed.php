@@ -23,7 +23,7 @@ class RequirePasswordConfirmed
 
         if ($confirmedAt + $timeout < time()) {
             // Not confirmed recently — redirect to confirm page
-            return redirect()->route('auth.password.confirm');
+            return redirect()->route('password.confirm');
         }
 
         return $next($request);
