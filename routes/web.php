@@ -7,8 +7,8 @@ Route::get('/', function () {
     return view('AuthPackage::welcome');
 });
 
-Route::group(['middleware' => ['auth', 'verified']], function () {
+// Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
-});
+// });
 
 require __DIR__.'/auth.php';

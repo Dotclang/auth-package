@@ -17,14 +17,37 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <button id="darkModeToggle" type="button" aria-pressed="false"
-                    class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m8.66-9H21M3 12H4.34M17.66 6.34l.7.7M6.64 17.36l.7.7M17.66 17.66l.7-.7M6.64 6.64l.7-.7">
-                        </path>
-                    </svg>
-                </button>
+                <div class="relative">
+                    <button id="darkModeToggle" type="button" aria-pressed="false" aria-controls="themeMenu" aria-expanded="false" aria-live="polite"
+                        class="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 3v1m0 16v1m8.66-9H21M3 12H4.34M17.66 6.34l.7.7M6.64 17.36l.7.7M17.66 17.66l.7-.7M6.64 6.64l.7-.7">
+                            </path>
+                        </svg>
+                        <span id="darkModeLabel" class="sr-only sm:inline text-sm">Auto</span>
+                    </button>
+
+                    <!-- Theme dropdown (anchored popover) -->
+                    <div id="themeMenu" role="menu" aria-hidden="true"
+                        class="hidden absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border rounded-md py-1">
+                        <button data-theme-option="auto" role="menuitem" type="button"
+                            class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <span class="text-lg">🌓</span>
+                            <span>Auto</span>
+                        </button>
+                        <button data-theme-option="dark" role="menuitem" type="button"
+                            class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <span class="text-lg">🌙</span>
+                            <span>Dark</span>
+                        </button>
+                        <button data-theme-option="light" role="menuitem" type="button"
+                            class="flex items-center gap-2 w-full text-left px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <span class="text-lg">☀️</span>
+                            <span>Light</span>
+                        </button>
+                    </div>
+                </div>
 
                 <div class="relative">
                     <button id="profileMenuButton" type="button" aria-expanded="false" aria-controls="profileMenu"
