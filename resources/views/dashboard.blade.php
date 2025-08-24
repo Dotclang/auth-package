@@ -1,4 +1,4 @@
-@extends('AuthPackage::layouts.auth')
+@extends('AuthPackage::layouts.app')
 
 @section('title', 'Dashboard')
 

@@ -9,6 +9,6 @@ class DashboardController extends Controller
 {
     public function __invoke(): View
     {
-        return view('AuthPackage::dashboard.index');
+        return view('AuthPackage::dashboard');
     }
 }
