@@ -34,3 +34,21 @@ php artisan authpackage:install
 ```
 
 Pass `--force` to overwrite previously published files.
+
+### Publishing front-end assets (optional)
+
+The install command can optionally publish the package's front-end assets (CSS, JS, images) into your application's `public/vendor` directory. Use the `--assets` flag to publish them non-interactively:
+
+```bash
+php artisan authpackage:install --assets
+```
+
+Or, run the install command without the flag and accept the interactive prompt when asked.
+
+You can also publish the assets later with the standard `vendor:publish` call:
+
+```bash
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag=assets
+```
+
+This will copy CSS to `public/vendor/Dotclang/auth-package/css`, JS to `public/vendor/Dotclang/auth-package/js`, and images to `public/vendor/Dotclang/auth-package/img`.

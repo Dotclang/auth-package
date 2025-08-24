@@ -28,10 +28,11 @@ class AuthServiceProvider extends BaseServiceProvider
         ], 'views');
 
         // Publish front-end assets (CSS/JS/images) so host apps without Vite can publish them to public/
+        // NOTE: resources images live under resources/img in this package.
         $this->publishes([
             __DIR__.'/../resources/css' => public_path('vendor/Dotclang/auth-package/css'),
             __DIR__.'/../resources/js' => public_path('vendor/Dotclang/auth-package/js'),
-            __DIR__.'/../resources/images' => public_path('vendor/Dotclang/auth-package/images'),
+            __DIR__.'/../resources/img' => public_path('vendor/Dotclang/auth-package/img'),
         ], 'assets');
 
         // Publish config (merge into host app's auth config)
