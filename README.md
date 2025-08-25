@@ -4,7 +4,7 @@ AuthPackage provides authentication views, controllers and routes for Laravel (l
 
 Installation
 
-1) Require the package from Packagist:
+1. Require the package from Packagist:
 
 ```bash
 composer require dotclang/auth-package
@@ -12,7 +12,7 @@ composer require dotclang/auth-package
 
 Package on Packagist: https://packagist.org/packages/dotclang/auth-package
 
-2) If your app does not auto-discover the provider, register the service provider in `config/app.php` providers array:
+2. If your app does not auto-discover the provider, register the service provider in `config/app.php` providers array:
 
 ```php
 Dotclang\AuthPackage\AuthServiceProvider::class,
