@@ -39,6 +39,17 @@ class AuthServiceProvider extends BaseServiceProvider
         $this->publishes([
             __DIR__.'/../config/auth.php' => app()->configPath('auth.php'),
         ], 'auth-config');
+
+        // Debug: when running artisan in a host app, dump the publishes array to a log
+        // so you can confirm which groups/paths were registered. Remove this in production.
+        if ($this->app->runningInConsole()) {
+            try {
+                $dump = var_export($this->publishes, true);
+                @file_put_contents(storage_path('logs/authpackage-publishes.log'), $dump.PHP_EOL, FILE_APPEND | LOCK_EX);
+            } catch (\Throwable $e) {
+                // ignore any errors while debugging
+            }
+        }
     }
 
     public function register(): void
