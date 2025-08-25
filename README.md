@@ -1,54 +1,77 @@
-# AuthPackage
+README
 
-This package provides authentication views and routes for Laravel (login, register, password reset) using Tailwind-styled blade templates.
+AuthPackage provides authentication views, controllers and routes for Laravel (login, register, password reset) using Tailwind-styled Blade templates.
 
-## Notes
+Installation
 
-- The package publishes a small config (`config/auth.php`) which exposes `password_timeout`. To publish it run:
+1) Require the package from Packagist:
 
 ```bash
-# Install package
 composer require dotclang/auth-package
 ```
 
+Package on Packagist: https://packagist.org/packages/dotclang/auth-package
+
+2) If your app does not auto-discover the provider, register the service provider in `config/app.php` providers array:
+
+```php
+Dotclang\AuthPackage\AuthServiceProvider::class,
+```
+
+Publishing files
+
+You can publish individual parts of the package using `vendor:publish` with the provider and tag.
+
+- Publish configuration (merged into `config('auth')`):
+
 ```bash
-# Publish package configuration only
 php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="auth-config"
 ```
 
-Or publish views and config together with:
+- Publish views (into `resources/views/vendor/auth-package`):
 
 ```bash
 php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="views"
-php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="auth-config"
 ```
 
-Note: the package merges its `config/auth.php` into your application's `auth` config so the `password_timeout` setting is available as `config('auth.password_timeout')`.
+- Publish controllers (into `app/Http/Controllers/AuthPackage`):
 
-## Install command
+```bash
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="controllers"
+```
 
-This package ships with a convenience command to publish views and configuration and to show Tailwind setup notes. To run it:
+- Publish routes (copies package `routes/*.php` into your app `routes/`):
+
+```bash
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="routes"
+```
+
+- Publish front-end assets (optional):
+
+```bash
+php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag="assets"
+```
+
+Install command (convenience)
+
+The package provides a convenience installer command that publishes config, views, controllers and routes, and optionally assets. Usage:
 
 ```bash
 php artisan authpackage:install
 ```
 
-Pass `--force` to overwrite previously published files.
+Flags:
 
-### Publishing front-end assets (optional)
+- `--assets` — publish front-end assets non-interactively
+- `--force` — overwrite any previously published files
 
-The install command can optionally publish the package's front-end assets (CSS, JS, images) into your application's `public/vendor` directory. Use the `--assets` flag to publish them non-interactively:
-
-```bash
-php artisan authpackage:install --assets
-```
-
-Or, run the install command without the flag and accept the interactive prompt when asked.
-
-You can also publish the assets later with the standard `vendor:publish` call:
+Example (publish everything including assets, force overwrite):
 
 ```bash
-php artisan vendor:publish --provider="Dotclang\\AuthPackage\\AuthServiceProvider" --tag=assets
+php artisan authpackage:install --assets --force
 ```
 
-This will copy CSS to `public/vendor/Dotclang/auth-package/css`, JS to `public/vendor/Dotclang/auth-package/js`, and images to `public/vendor/Dotclang/auth-package/img`.
+Notes
+
+- The package merges `config/auth.php` into your app `auth` config so `config('auth.password_timeout')` will be available.
+- Views are loaded under the `auth-package::` namespace; after publishing you can edit the views in `resources/views/vendor/auth-package`.

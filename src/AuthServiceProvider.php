@@ -9,56 +9,48 @@ class AuthServiceProvider extends BaseServiceProvider
 {
     public function boot(): void
     {
-        // Register middleware alias
-        if ($this->app->resolved('router')) {
-            $router = $this->app->make('router');
-            $router->aliasMiddleware('password.confirmed', \Dotclang\AuthPackage\Http\Middleware\RequirePasswordConfirmed::class);
+        // Load package routes (so package works out of the box)
+        if (file_exists(__DIR__ . '/../routes/auth.php')) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/auth.php');
         }
 
-        // Load package web and auth routes
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
-        $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
+        // Load package views under the "auth-package" namespace
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'auth-package');
 
-        // Load views (if you want blade-based login)
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'AuthPackage');
-
-        // Publish views and migrations so host apps can customize them
+        // Publish configuration
         $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/AuthPackage'),
-        ], 'views');
-
-        // Publish front-end assets (CSS/JS/images) so host apps without Vite can publish them to public/
-        // NOTE: resources images live under resources/img in this package.
-        $this->publishes([
-            __DIR__.'/../resources/css' => public_path('vendor/Dotclang/auth-package/css'),
-            __DIR__.'/../resources/js' => public_path('vendor/Dotclang/auth-package/js'),
-            __DIR__.'/../resources/img' => public_path('vendor/Dotclang/auth-package/img'),
-        ], 'assets');
-
-        // Publish config (merge into host app's auth config)
-        $this->publishes([
-            __DIR__.'/../config/auth.php' => app()->configPath('auth.php'),
+            __DIR__ . '/../config/auth.php' => config_path('auth.php'),
         ], 'auth-config');
 
-        // Debug: when running artisan in a host app, dump the publishes array to a log
-        // so you can confirm which groups/paths were registered. Remove this in production.
-        if ($this->app->runningInConsole()) {
-            try {
-                $dump = var_export($this->publishes, true);
-                @file_put_contents(storage_path('logs/authpackage-publishes.log'), $dump.PHP_EOL, FILE_APPEND | LOCK_EX);
-            } catch (\Throwable $e) {
-                // ignore any errors while debugging
-            }
-        }
+        // Publish views so application can override them
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/auth-package'),
+        ], 'views');
+
+        // Publish controllers into the application's Http/Controllers directory
+        $this->publishes([
+            __DIR__ . '/Http/Controllers' => app_path('Http/Controllers/AuthPackage'),
+        ], 'controllers');
+
+        // Publish package route files so the app can customize them
+        $this->publishes([
+            __DIR__ . '/../routes' => base_path('routes'),
+        ], 'routes');
+
+        // Optional front-end assets publish
+        $this->publishes([
+            __DIR__ . '/../resources/css' => public_path('vendor/dotclang/auth-package/css'),
+            __DIR__ . '/../resources/js' => public_path('vendor/dotclang/auth-package/js'),
+            __DIR__ . '/../resources/img' => public_path('vendor/dotclang/auth-package/img'),
+        ], 'assets');
     }
 
     public function register(): void
     {
-        // Merge package config so host app gets defaults without having to publish
-        if (file_exists(__DIR__.'/../config/auth.php')) {
-            $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'auth');
-        }
+        // Merge package auth config into application's auth config
+        $this->mergeConfigFrom(__DIR__ . '/../config/auth.php', 'auth');
 
+        // Register the install command when running in the console
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Dotclang\AuthPackage\Console\InstallCommand::class,
