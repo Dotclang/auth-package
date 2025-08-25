@@ -648,22 +648,22 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.9.x-dev",
+            "version": "7.10.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "7b2f29fe81dc4da0ca0ea7d42107a0845946ea77"
+                "reference": "b51ac707cfa420b7bfd4e4d5e510ba8008e822b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/7b2f29fe81dc4da0ca0ea7d42107a0845946ea77",
-                "reference": "7b2f29fe81dc4da0ca0ea7d42107a0845946ea77",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/b51ac707cfa420b7bfd4e4d5e510ba8008e822b4",
+                "reference": "b51ac707cfa420b7bfd4e4d5e510ba8008e822b4",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^1.5.3 || ^2.0.3",
-                "guzzlehttp/psr7": "^2.7.0",
+                "guzzlehttp/promises": "^2.3",
+                "guzzlehttp/psr7": "^2.8",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
                 "symfony/deprecation-contracts": "^2.2 || ^3.0"
@@ -755,7 +755,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.9.3"
+                "source": "https://github.com/guzzle/guzzle/tree/7.10.0"
             },
             "funding": [
                 {
@@ -771,7 +771,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-03-27T13:37:11+00:00"
+            "time": "2025-08-23T22:36:01+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -863,12 +863,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "d54eefe3a4387837958077e3fc3f823a56131d72"
+                "reference": "21dc724a0583619cd1652f673303492272778051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/d54eefe3a4387837958077e3fc3f823a56131d72",
-                "reference": "d54eefe3a4387837958077e3fc3f823a56131d72",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/21dc724a0583619cd1652f673303492272778051",
+                "reference": "21dc724a0583619cd1652f673303492272778051",
                 "shasum": ""
             },
             "require": {
@@ -889,6 +889,7 @@
             "suggest": {
                 "laminas/laminas-httphandlerrunner": "Emit PSR-7 responses"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "bamarni-bin": {
@@ -955,7 +956,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/psr7/issues",
-                "source": "https://github.com/guzzle/psr7/tree/2.8"
+                "source": "https://github.com/guzzle/psr7/tree/2.8.0"
             },
             "funding": [
                 {
@@ -971,7 +972,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-22T13:19:16+00:00"
+            "time": "2025-08-23T21:21:41+00:00"
         },
         {
             "name": "guzzlehttp/uri-template",
@@ -1066,12 +1067,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "b8e2aa2527fb5601698e8021b3b205632ef2e4ba"
+                "reference": "9053ac2b49cd2cc79cda5a20329c8dfef1e04d52"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/b8e2aa2527fb5601698e8021b3b205632ef2e4ba",
-                "reference": "b8e2aa2527fb5601698e8021b3b205632ef2e4ba",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9053ac2b49cd2cc79cda5a20329c8dfef1e04d52",
+                "reference": "9053ac2b49cd2cc79cda5a20329c8dfef1e04d52",
                 "shasum": ""
             },
             "require": {
@@ -1276,7 +1277,7 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2025-08-22T14:22:42+00:00"
+            "time": "2025-08-25T17:50:07+00:00"
         },
         {
             "name": "laravel/prompts",
@@ -3192,12 +3193,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "263db9fc861af7e6b5953e101f2ccbe6b163435b"
+                "reference": "b260cdc5b9fabd442cf21b0c516d4cc4dbec24db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/263db9fc861af7e6b5953e101f2ccbe6b163435b",
-                "reference": "263db9fc861af7e6b5953e101f2ccbe6b163435b",
+                "url": "https://api.github.com/repos/symfony/console/zipball/b260cdc5b9fabd442cf21b0c516d4cc4dbec24db",
+                "reference": "b260cdc5b9fabd442cf21b0c516d4cc4dbec24db",
                 "shasum": ""
             },
             "require": {
@@ -3282,7 +3283,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-22T12:01:58+00:00"
+            "time": "2025-08-25T07:22:03+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -5022,12 +5023,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/routing.git",
-                "reference": "ec13b221bed0ebe07985cc57202f0bb2911bf72a"
+                "reference": "d2e6f5c3f912b443d787ed31f0006dda82fcd471"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/routing/zipball/ec13b221bed0ebe07985cc57202f0bb2911bf72a",
-                "reference": "ec13b221bed0ebe07985cc57202f0bb2911bf72a",
+                "url": "https://api.github.com/repos/symfony/routing/zipball/d2e6f5c3f912b443d787ed31f0006dda82fcd471",
+                "reference": "d2e6f5c3f912b443d787ed31f0006dda82fcd471",
                 "shasum": ""
             },
             "require": {
@@ -5099,7 +5100,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-22T14:24:54+00:00"
+            "time": "2025-08-25T06:55:45+00:00"
         },
         {
             "name": "symfony/service-contracts",
@@ -5892,12 +5893,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "eadd4f26e606d18351499bc214fb5e24cad4f063"
+                "reference": "3c223047e374befd1b64959784685d6ecccf66aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/eadd4f26e606d18351499bc214fb5e24cad4f063",
-                "reference": "eadd4f26e606d18351499bc214fb5e24cad4f063",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/3c223047e374befd1b64959784685d6ecccf66aa",
+                "reference": "3c223047e374befd1b64959784685d6ecccf66aa",
                 "shasum": ""
             },
             "require": {
@@ -5966,7 +5967,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/3.x"
+                "source": "https://github.com/larastan/larastan/tree/v3.6.1"
             },
             "funding": [
                 {
@@ -5974,7 +5975,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-23T11:49:24+00:00"
+            "time": "2025-08-25T07:24:56+00:00"
         },
         {
             "name": "laravel/pint",
@@ -6052,12 +6053,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2393b961ddc1dc71c19e510c1255c700ceb6d4e3"
+                "reference": "3c4254e3b2a80d937387944ecced5e9d7b110049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2393b961ddc1dc71c19e510c1255c700ceb6d4e3",
-                "reference": "2393b961ddc1dc71c19e510c1255c700ceb6d4e3",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3c4254e3b2a80d937387944ecced5e9d7b110049",
+                "reference": "3c4254e3b2a80d937387944ecced5e9d7b110049",
                 "shasum": ""
             },
             "require": {
@@ -6103,7 +6104,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-21T14:26:11+00:00"
+            "time": "2025-08-25T10:51:10+00:00"
         }
     ],
     "aliases": [],
