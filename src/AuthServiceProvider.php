@@ -43,6 +43,11 @@ class AuthServiceProvider extends BaseServiceProvider
 
     public function register(): void
     {
+        // Merge package config so host app gets defaults without having to publish
+        if (file_exists(__DIR__.'/../config/auth.php')) {
+            $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'auth');
+        }
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 \Dotclang\AuthPackage\Console\InstallCommand::class,
