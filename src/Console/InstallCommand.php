@@ -85,6 +85,59 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
+        // Merge published routes into application's routes/web.php
+        $this->info('Merging published routes into routes/web.php...');
+        $fsRoutes = new Filesystem;
+        $routesDir = base_path('routes');
+        $mainWeb = $routesDir.DIRECTORY_SEPARATOR.'web.php';
+        $marker = '// BEGIN DOTCLANG AUTH-PACKAGE ROUTES';
+
+        if (! $fsRoutes->exists($mainWeb)) {
+            // create web.php if it doesn't exist
+            $fsRoutes->put($mainWeb, "<?php\n\n");
+        }
+
+        $webContents = $fsRoutes->get($mainWeb);
+
+        // Avoid merging twice
+        if (str_contains($webContents, $marker)) {
+            $this->comment('Auth-package routes already merged into routes/web.php, skipping.');
+        } else {
+            $files = $fsRoutes->files($routesDir);
+            foreach ($files as $file) {
+                $path = $file->getPathname();
+                $filename = $file->getFilename();
+
+                // Skip the main web.php file itself
+                if ($filename === 'web.php') {
+                    // If the published web.php contains Dotclang references, extract and append
+                    $candidate = $fsRoutes->get($path);
+                    if (str_contains($candidate, 'Dotclang\\AuthPackage\\Http\\Controllers')) {
+                        $candidate = str_replace('use Dotclang\\AuthPackage\\Http\\Controllers\\', 'use App\\Http\\Controllers\\', $candidate);
+                        $append = "\n\n".$marker."\n".$candidate."\n// END DOTCLANG AUTH-PACKAGE ROUTES\n";
+                        $fsRoutes->append($mainWeb, $append);
+                        $this->info('Merged published web.php into routes/web.php');
+                    }
+
+                    continue;
+                }
+
+                // For other route files (like auth.php), merge if they reference package controllers
+                $content = $fsRoutes->get($path);
+                if (str_contains($content, 'Dotclang\\AuthPackage\\Http\\Controllers')) {
+                    // rewrite controller use statements to App namespace
+                    $content = str_replace('use Dotclang\\AuthPackage\\Http\\Controllers\\', 'use App\\Http\\Controllers\\', $content);
+
+                    $append = "\n\n".$marker."\n".$content."\n// END DOTCLANG AUTH-PACKAGE ROUTES\n";
+                    $fsRoutes->append($mainWeb, $append);
+                    $this->info("Merged routes from {$filename} into routes/web.php");
+
+                    // remove the published file to avoid duplicate route loading
+                    $fsRoutes->delete($path);
+                }
+            }
+        }
+
         if ($assets) {
             $this->info('Publishing front-end assets...');
             $this->callSilent('vendor:publish', [
