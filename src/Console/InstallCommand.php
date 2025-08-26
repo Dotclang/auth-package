@@ -45,7 +45,7 @@ class InstallCommand extends Command
         // rewrite the namespace and common package imports so they live under App\Http\Controllers
         $this->info('Rewriting controller namespaces to App namespace...');
         $fs = new Filesystem;
-        $targetDir = app_path('Http/Controllers/AuthPackage');
+        $targetDir = app_path('Http/Controllers');
 
         if ($fs->isDirectory($targetDir)) {
             $files = $fs->allFiles($targetDir);
@@ -86,56 +86,39 @@ class InstallCommand extends Command
         ]);
 
         // Merge published routes into application's routes/web.php
-        $this->info('Merging published routes into routes/web.php...');
+        $this->info('Rewriting published routes namespaces to App namespace...');
         $fsRoutes = new Filesystem;
         $routesDir = base_path('routes');
-        $mainWeb = $routesDir.DIRECTORY_SEPARATOR.'web.php';
-        $marker = '// BEGIN DOTCLANG AUTH-PACKAGE ROUTES';
 
-        if (! $fsRoutes->exists($mainWeb)) {
-            // create web.php if it doesn't exist
-            $fsRoutes->put($mainWeb, "<?php\n\n");
-        }
-
-        $webContents = $fsRoutes->get($mainWeb);
-
-        // Avoid merging twice
-        if (str_contains($webContents, $marker)) {
-            $this->comment('Auth-package routes already merged into routes/web.php, skipping.');
-        } else {
-            $files = $fsRoutes->files($routesDir);
+        if ($fsRoutes->isDirectory($routesDir)) {
+            $files = $fsRoutes->allFiles($routesDir);
             foreach ($files as $file) {
                 $path = $file->getPathname();
-                $filename = $file->getFilename();
+                $this->info('Rewriting file: '.$file->getFilename());
+                $contents = $fsRoutes->get($path);
 
-                // Skip the main web.php file itself
-                if ($filename === 'web.php') {
-                    // If the published web.php contains Dotclang references, extract and append
-                    $candidate = $fsRoutes->get($path);
-                    if (str_contains($candidate, 'Dotclang\\AuthPackage\\Http\\Controllers')) {
-                        $candidate = str_replace('use Dotclang\\AuthPackage\\Http\\Controllers\\', 'use App\\Http\\Controllers\\', $candidate);
-                        $append = "\n\n".$marker."\n".$candidate."\n// END DOTCLANG AUTH-PACKAGE ROUTES\n";
-                        $fsRoutes->append($mainWeb, $append);
-                        $this->info('Merged published web.php into routes/web.php');
-                    }
-
+                // Skip if already adjusted
+                if (str_contains($contents, 'use App\\')) {
                     continue;
                 }
 
-                // For other route files (like auth.php), merge if they reference package controllers
-                $content = $fsRoutes->get($path);
-                if (str_contains($content, 'Dotclang\\AuthPackage\\Http\\Controllers')) {
-                    // rewrite controller use statements to App namespace
-                    $content = str_replace('use Dotclang\\AuthPackage\\Http\\Controllers\\', 'use App\\Http\\Controllers\\', $content);
-
-                    $append = "\n\n".$marker."\n".$content."\n// END DOTCLANG AUTH-PACKAGE ROUTES\n";
-                    $fsRoutes->append($mainWeb, $append);
-                    $this->info("Merged routes from {$filename} into routes/web.php");
-
-                    // remove the published file to avoid duplicate route loading
-                    $fsRoutes->delete($path);
+                // Skip if already adjusted
+                if (str_contains($contents, 'use Illuminate\\')) {
+                    continue;
                 }
+
+                // Replace package route namespace with app routes namespace
+                $contents = str_replace(
+                    'use Dotclang\\AuthPackage\\Http\\Controllers',
+                    'use App\\Http\\Controllers',
+                    $contents
+                );
+
+                $fsRoutes->put($path, $contents);
+                $this->info("Updated: {$path}");
             }
+        } else {
+            $this->comment('No published routes found at: '.$routesDir);
         }
 
         if ($assets) {
