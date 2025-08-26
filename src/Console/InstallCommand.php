@@ -20,7 +20,7 @@ class InstallCommand extends Command
         $force = (bool) $this->option('force');
         $assets = (bool) $this->option('assets');
 
-        $fs = new Filesystem();
+        $fs = new Filesystem;
 
         // Publish configuration
         $this->info('Publishing configuration...');
@@ -46,6 +46,14 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
+        // Publish routes
+        $this->info('Publishing routes...');
+        $this->callSilent('vendor:publish', [
+            '--provider' => $provider,
+            '--tag' => 'routes',
+            '--force' => $force,
+        ]);
+
         // Rewrite namespaces in published controllers (only files that reference the package namespace)
         $this->info('Rewriting controller namespaces to App namespace...');
         $controllersDir = app_path('Http/Controllers');
@@ -59,13 +67,13 @@ class InstallCommand extends Command
                     continue;
                 }
                 // Replace namespace declaration if present
-                $contents = str_replace('namespace Dotclang\\AuthPackage\\Http\\Controllers;', 'namespace App\\Http\\Controllers;', $contents);
+                $contents = str_replace('namespace Dotclang\\AuthPackage\\', 'namespace App\\', $contents);
 
                 $fs->put($path, $contents);
-                $this->info('Updated controller: ' . $path);
+                $this->info('Updated controller: '.$path);
             }
         } else {
-            $this->comment('No controllers directory found at: ' . $controllersDir);
+            $this->comment('No controllers directory found at: '.$controllersDir);
         }
 
         // Rewrite namespaces in published requests (only files that reference the package namespace)
@@ -81,13 +89,13 @@ class InstallCommand extends Command
                     continue;
                 }
 
-                $contents = str_replace('Dotclang\\AuthPackage\\Http\\Requests\\', 'App\\Http\\Requests\\', $contents);
+                $contents = str_replace('Dotclang\\AuthPackage\\', 'App\\', $contents);
 
                 $fs->put($path, $contents);
-                $this->info('Updated request: ' . $path);
+                $this->info('Updated request: '.$path);
             }
         } else {
-            $this->comment('No requests directory found at: ' . $requestsDir);
+            $this->comment('No requests directory found at: '.$requestsDir);
         }
 
         // Rewrite namespaces in published middleware (only files that reference the package namespace)
@@ -103,36 +111,25 @@ class InstallCommand extends Command
                     continue;
                 }
 
-                $contents = str_replace('Dotclang\\AuthPackage\\Http\\Middleware\\', 'App\\Http\\Middleware\\', $contents);
+                $contents = str_replace('Dotclang\\AuthPackage\\', 'App\\', $contents);
 
                 $fs->put($path, $contents);
-                $this->info('Updated middleware: ' . $path);
+                $this->info('Updated middleware: '.$path);
             }
         } else {
-            $this->comment('No middleware directory found at: ' . $middlewareDir);
+            $this->comment('No middleware directory found at: '.$middlewareDir);
         }
 
-
-        // Publish package route files into application's routes directory, rewriting controller namespaces
-        $this->info('Publishing route files...');
-
-        // run vendor:publish for tag 'routes' first (keeps standard flow)
-        $this->callSilent('vendor:publish', [
-            '--provider' => $provider,
-            '--tag' => 'routes',
-            '--force' => $force,
-        ]);
-
-        $packageRoutesDir = __DIR__ . '/../../routes';
+        $packageRoutesDir = __DIR__.'/../../routes';
         $appRoutesDir = base_path('routes');
         if (! $fs->isDirectory($packageRoutesDir)) {
-            $this->comment('No package route files found to publish in: ' . $packageRoutesDir);
+            $this->comment('No package route files found to publish in: '.$packageRoutesDir);
         } else {
             $files = $fs->files($packageRoutesDir);
             foreach ($files as $file) {
                 $filename = $file->getFilename();
                 $source = $file->getPathname();
-                $target = $appRoutesDir . DIRECTORY_SEPARATOR . $filename;
+                $target = $appRoutesDir.DIRECTORY_SEPARATOR.$filename;
 
                 $contents = $fs->get($source);
 

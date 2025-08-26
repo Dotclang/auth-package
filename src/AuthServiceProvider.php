@@ -23,7 +23,6 @@ class AuthServiceProvider extends BaseServiceProvider
             __DIR__.'/../routes' => base_path('routes'),
         ], 'routes');
 
-       
         // Publish configuration
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
