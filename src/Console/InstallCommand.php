@@ -14,12 +14,15 @@ class InstallCommand extends Command
 
     public function handle(): int
     {
-        $provider = AuthServiceProvider::class;
         $this->info('⚡ Installing AuthPackage...');
+        $provider = AuthServiceProvider::class;
 
-        $force = $this->option('force');
-        $assets = $this->option('assets');
+        $force = (bool) $this->option('force');
+        $assets = (bool) $this->option('assets');
 
+        $fs = new Filesystem();
+
+        // Publish configuration
         $this->info('Publishing configuration...');
         $this->callSilent('vendor:publish', [
             '--provider' => $provider,
@@ -27,6 +30,7 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
+        // Publish views
         $this->info('Publishing views...');
         $this->callSilent('vendor:publish', [
             '--provider' => $provider,
@@ -34,6 +38,93 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
+        // Publish routes
+        $this->info('Publishing routes...');
+        $this->callSilent('vendor:publish', [
+            '--provider' => $provider,
+            '--tag' => 'controllers',
+            '--force' => $force,
+        ]);
+
+        // Rewrite namespaces in published controllers (only files that reference the package namespace)
+        $this->info('Rewriting controller namespaces to App namespace...');
+        $controllersDir = app_path('Http/Controllers');
+        if ($fs->isDirectory($controllersDir)) {
+            $files = $fs->allFiles($controllersDir);
+            foreach ($files as $file) {
+                $path = $file->getPathname();
+                $contents = $fs->get($path);
+
+                if (! str_contains($contents, 'Dotclang\\AuthPackage')) {
+                    continue;
+                }
+
+                // Replace namespace declaration if present
+                $contents = str_replace('namespace Dotclang\\AuthPackage\\Http\\Controllers;', 'namespace App\\Http\\Controllers;', $contents);
+
+                // Replace common imports/references
+                $contents = str_replace('Dotclang\\AuthPackage\\Http\\Requests\\', 'App\\Http\\Requests\\', $contents);
+                $contents = str_replace('Dotclang\\AuthPackage\\Models\\', 'App\\Models\\', $contents);
+
+                $fs->put($path, $contents);
+                $this->info('Updated controller: ' . $path);
+            }
+        } else {
+            $this->comment('No controllers directory found at: ' . $controllersDir);
+        }
+
+        // Publish and copy package route files into application's routes directory, rewriting controller namespaces
+        $this->info('Publishing and copying package route files...');
+
+        // run vendor:publish for tag 'routes' first (keeps standard flow)
+        $this->callSilent('vendor:publish', [
+            '--provider' => $provider,
+            '--tag' => 'routes',
+            '--force' => $force,
+        ]);
+
+        $packageRoutesDir = __DIR__ . '/../../routes';
+        $appRoutesDir = base_path('routes');
+
+        if (! $fs->isDirectory($packageRoutesDir)) {
+            $this->comment('No package route files found to publish in: ' . $packageRoutesDir);
+        } else {
+            $files = $fs->files($packageRoutesDir);
+            foreach ($files as $file) {
+                $filename = $file->getFilename();
+                $source = $file->getPathname();
+                $target = $appRoutesDir . DIRECTORY_SEPARATOR . $filename;
+
+                $contents = $fs->get($source);
+
+                // Rewrite controller references: use statements and fully-qualified class names
+                $contents = str_replace('use Dotclang\\AuthPackage\\Http\\Controllers\\', 'use App\\Http\\Controllers\\', $contents);
+                $contents = str_replace('Dotclang\\AuthPackage\\Http\\Controllers\\', 'App\\Http\\Controllers\\', $contents);
+
+                // Also fix requests namespace in routes if used
+                $contents = str_replace('Dotclang\\AuthPackage\\Http\\Requests\\', 'App\\Http\\Requests\\', $contents);
+
+                // Write file to app routes directory, honoring --force or asking interactively
+                if ($fs->exists($target)) {
+                    if ($force) {
+                        $fs->put($target, $contents);
+                        $this->info("Replaced existing route: {$target}");
+                    } else {
+                        if ($this->confirm("routes/{$filename} already exists. Overwrite?", false)) {
+                            $fs->put($target, $contents);
+                            $this->info("Replaced existing route: {$target}");
+                        } else {
+                            $this->comment("Skipped route: {$filename}");
+                        }
+                    }
+                } else {
+                    $fs->put($target, $contents);
+                    $this->info("Published route: {$target}");
+                }
+            }
+        }
+
+        // Publish controllers
         $this->info('Publishing controllers...');
         $this->callSilent('vendor:publish', [
             '--provider' => $provider,
@@ -41,85 +132,35 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
-        // After controllers are published into the application's controllers folder,
-        // rewrite the namespace and common package imports so they live under App\Http\Controllers
+        // Rewrite namespaces in published controllers (only files that reference the package namespace)
         $this->info('Rewriting controller namespaces to App namespace...');
-        $fs = new Filesystem;
-        $targetDir = app_path('Http/Controllers');
-
-        if ($fs->isDirectory($targetDir)) {
-            $files = $fs->allFiles($targetDir);
+        $controllersDir = app_path('Http/Controllers');
+        if ($fs->isDirectory($controllersDir)) {
+            $files = $fs->allFiles($controllersDir);
             foreach ($files as $file) {
                 $path = $file->getPathname();
                 $contents = $fs->get($path);
 
-                // Skip if already adjusted
-                if (str_contains($contents, 'namespace App\\')) {
+                if (! str_contains($contents, 'Dotclang\\AuthPackage')) {
                     continue;
                 }
 
-                // Replace package controller namespace with app controllers namespace
-                $contents = str_replace(
-                    'namespace Dotclang\\AuthPackage\\Http\\Controllers',
-                    'namespace App\\Http\\Controllers',
-                    $contents
-                );
+                // Replace namespace declaration if present
+                $contents = str_replace('namespace Dotclang\\AuthPackage\\Http\\Controllers;', 'namespace App\\Http\\Controllers;', $contents);
 
-                // Replace common package imports to point to App equivalents
+                // Replace common imports/references
                 $contents = str_replace('Dotclang\\AuthPackage\\Http\\Requests\\', 'App\\Http\\Requests\\', $contents);
                 $contents = str_replace('Dotclang\\AuthPackage\\Models\\', 'App\\Models\\', $contents);
 
-                // If view calls reference package view namespace, leave them as-is (developer can adjust)
-
                 $fs->put($path, $contents);
-                $this->info("Updated: {$path}");
+                $this->info('Updated controller: ' . $path);
             }
         } else {
-            $this->comment('No published controllers found at: '.$targetDir);
+            $this->comment('No controllers directory found at: ' . $controllersDir);
         }
 
-        $this->info('Publishing routes...');
-        $this->callSilent('vendor:publish', [
-            '--provider' => $provider,
-            '--tag' => 'routes',
-            '--force' => $force,
-        ]);
 
-        $this->info('Rewriting published routes namespaces to App namespace...');
-        $fsRoutes = new Filesystem;
-        $routesDir = base_path('routes');
-
-        if ($fsRoutes->isDirectory($routesDir)) {
-            $files = $fsRoutes->allFiles($routesDir);
-            foreach ($files as $file) {
-                $path = $file->getPathname();
-                $this->info('Rewriting file: '.$file->getFilename());
-                $contents = $fsRoutes->get($path);
-
-                // Skip if already adjusted
-                if (str_contains($contents, 'use App\\')) {
-                    continue;
-                }
-
-                // Skip if already adjusted
-                if (str_contains($contents, 'use Illuminate\\')) {
-                    continue;
-                }
-
-                // Replace package route namespace with app routes namespace
-                $contents = str_replace(
-                    'use Dotclang\\AuthPackage\\Http\\Controllers',
-                    'use App\\Http\\Controllers',
-                    $contents
-                );
-
-                $fsRoutes->put($path, $contents);
-                $this->info("Updated: {$path} contents: {$contents}");
-            }
-        } else {
-            $this->comment('No published routes found at: '.$routesDir);
-        }
-
+        // Optional assets
         if ($assets) {
             $this->info('Publishing front-end assets...');
             $this->callSilent('vendor:publish', [
@@ -139,8 +180,7 @@ class InstallCommand extends Command
         }
 
         $this->line('Installation complete.');
-
-        $this->comment('Remember to review your routes in routes/web.php and adjust middleware/auth as needed.');
+        $this->comment('Review published controllers and routes. Adjust view references or namespace choices if required.');
 
         return Command::SUCCESS;
     }

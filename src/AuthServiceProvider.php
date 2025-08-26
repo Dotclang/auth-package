@@ -8,18 +8,22 @@ class AuthServiceProvider extends BaseServiceProvider
 {
     public function boot(): void
     {
-        // Load package routes (so package works out of the box)
+        // Load auth routes
         if (file_exists(__DIR__.'/../routes/auth.php')) {
             $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
         }
 
+        // Load web routes
         if (file_exists(__DIR__.'/../routes/web.php')) {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         }
 
-        // Load package views under the "auth-package" namespace
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'auth-package');
+        // Publish package route files so the app can customize them
+        $this->publishes([
+            __DIR__.'/../routes' => base_path('routes'),
+        ], 'routes');
 
+       
         // Publish configuration
         $this->publishes([
             __DIR__.'/../config/auth.php' => config_path('auth.php'),
@@ -30,23 +34,18 @@ class AuthServiceProvider extends BaseServiceProvider
             __DIR__.'/../resources/views' => resource_path('views'),
         ], 'views');
 
-        // Publish controllers into the application's Http/Controllers directory
+        // Publish controllers, requests and middleware
         $this->publishes([
             __DIR__.'/Http/Controllers' => app_path('Http/Controllers'),
             __DIR__.'/Http/Requests' => app_path('Http/Requests'),
             __DIR__.'/Http/Middleware' => app_path('Http/Middleware'),
         ], 'controllers');
 
-        // Publish package route files so the app can customize them
-        $this->publishes([
-            __DIR__.'/../routes' => base_path('routes'),
-        ], 'routes');
-
         // Optional front-end assets publish
         $this->publishes([
-            __DIR__.'/../resources/css' => public_path('vendor/dotclang/auth-package/css'),
-            __DIR__.'/../resources/js' => public_path('vendor/dotclang/auth-package/js'),
-            __DIR__.'/../resources/img' => public_path('vendor/dotclang/auth-package/img'),
+            __DIR__.'/../resources/css' => resource_path('vendor/dotclang/auth-package/css'),
+            __DIR__.'/../resources/js' => resource_path('vendor/dotclang/auth-package/js'),
+            __DIR__.'/../resources/img' => resource_path('vendor/dotclang/auth-package/img'),
         ], 'assets');
     }
 
