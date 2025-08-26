@@ -178,6 +178,14 @@ class InstallCommand extends Command
         $this->line('Installation complete.');
         $this->comment('Review published controllers and routes. Adjust view references or namespace choices if required.');
 
+        // Clean up any temporary files or directories
+        // $this->info('Cleaning up temporary files...');
+        // $tempDir = sys_get_temp_dir().'/auth-package';
+        // if (is_dir($tempDir)) {
+        //     File::deleteDirectory($tempDir);
+        //     $this->info('Deleted temporary directory: '.$tempDir);
+        // }
+
         return Command::SUCCESS;
     }
 }
