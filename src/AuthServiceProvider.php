@@ -13,6 +13,10 @@ class AuthServiceProvider extends BaseServiceProvider
             $this->loadRoutesFrom(__DIR__.'/../routes/auth.php');
         }
 
+        if (file_exists(__DIR__.'/../routes/web.php')) {
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        }
+
         // Load package views under the "auth-package" namespace
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'auth-package');
 
@@ -23,12 +27,12 @@ class AuthServiceProvider extends BaseServiceProvider
 
         // Publish views so application can override them
         $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/auth-package'),
+            __DIR__.'/../resources/views' => resource_path('views'),
         ], 'views');
 
         // Publish controllers into the application's Http/Controllers directory
         $this->publishes([
-            __DIR__.'/Http/Controllers' => app_path('Http/Controllers/AuthPackage'),
+            __DIR__.'/Http/Controllers' => app_path('Http/Controllers'),
         ], 'controllers');
 
         // Publish package route files so the app can customize them
