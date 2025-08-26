@@ -60,8 +60,8 @@ class InstallCommand extends Command
 
                 // Replace package controller namespace with app controllers namespace
                 $contents = str_replace(
-                    'namespace Dotclang\\AuthPackage\\Http\\Controllers;',
-                    'namespace App\\Http\\Controllers;',
+                    'namespace Dotclang\\AuthPackage\\Http\\Controllers',
+                    'namespace App\\Http\\Controllers',
                     $contents
                 );
 
@@ -85,7 +85,6 @@ class InstallCommand extends Command
             '--force' => $force,
         ]);
 
-        // Merge published routes into application's routes/web.php
         $this->info('Rewriting published routes namespaces to App namespace...');
         $fsRoutes = new Filesystem;
         $routesDir = base_path('routes');
@@ -115,7 +114,7 @@ class InstallCommand extends Command
                 );
 
                 $fsRoutes->put($path, $contents);
-                $this->info("Updated: {$path}");
+                $this->info("Updated: {$path} contents: {$contents}");
             }
         } else {
             $this->comment('No published routes found at: '.$routesDir);

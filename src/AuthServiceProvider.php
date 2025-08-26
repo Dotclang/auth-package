@@ -33,6 +33,8 @@ class AuthServiceProvider extends BaseServiceProvider
         // Publish controllers into the application's Http/Controllers directory
         $this->publishes([
             __DIR__.'/Http/Controllers' => app_path('Http/Controllers'),
+            __DIR__.'/Http/Requests' => app_path('Http/Requests'),
+            __DIR__.'/Http/Middleware' => app_path('Http/Middleware'),
         ], 'controllers');
 
         // Publish package route files so the app can customize them
