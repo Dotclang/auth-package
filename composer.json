@@ -34,12 +34,6 @@
       "Dotclang\\AuthPackage\\Tests\\": "tests/"
     }
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/Dotclang/auth-package.git"
-    }
-  ],
   "minimum-stability": "dev",
   "extra": {
     "laravel": {
