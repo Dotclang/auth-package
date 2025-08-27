@@ -5,10 +5,14 @@ namespace Dotclang\AuthPackage\Console;
 use Dotclang\AuthPackage\AuthServiceProvider;
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
-    protected $signature = 'authpackage:install {--assets : Publish front-end assets (css/js/img)} {--force : Overwrite existing files}';
+    protected $signature = 'authpackage:install 
+                            {--assets : Publish front-end assets (css/js/img)} 
+                            {--force : Overwrite existing files}
+                            {--with-dev-tools : Install development tools}';
 
     protected $description = 'Install the AuthPackage (publish views, controllers, routes and merge config)';
 
@@ -19,6 +23,7 @@ class InstallCommand extends Command
 
         $force = (bool) $this->option('force');
         $assets = (bool) $this->option('assets');
+        $withDevTools = (bool) $this->option('with-dev-tools');
 
         $fs = new Filesystem;
 
@@ -131,6 +136,11 @@ class InstallCommand extends Command
             }
         }
 
+        // ✅ Install dev tools if option enabled
+        if ($withDevTools) {
+            $this->installDevTools();
+        }
+
         $this->line('Installation complete.');
         $this->comment('Review published controllers and routes. Adjust view references or namespace choices if required.');
 
@@ -143,5 +153,30 @@ class InstallCommand extends Command
         // }
 
         return Command::SUCCESS;
+    }
+
+    protected function installDevTools(): void
+    {
+        $this->info('📦 Installing recommended dev tools...');
+
+        $devPackages = [
+            'larastan/larastan:^3.0',
+            // Tambah di sini kalau ada lagi (misal "nunomaduro/larastan", "laravel/pint", dll.)
+        ];
+
+        foreach ($devPackages as $package) {
+            $this->info("Installing {$package}...");
+            $process = new Process([PHP_BINARY, 'composer', 'require', '--dev', $package], base_path());
+            $process->setTimeout(null);
+            $process->run(function ($type, $buffer) {
+                echo $buffer;
+            });
+
+            if ($process->isSuccessful()) {
+                $this->info("✅ {$package} installed successfully.");
+            } else {
+                $this->error("❌ Failed to install {$package}.");
+            }
+        }
     }
 }
