@@ -1,0 +1,33 @@
+# --- Wajib disertakan (tidak perlu ditandai apapun, default ikut) ---
+# config/
+# resources/
+# routes/
+# src/
+# composer.json
+# LICENSE
+# README.md
+
+# --- Folder / File yang dibuang dari dist archive ---
+/bootstrap       export-ignore
+/database       export-ignore
+/node_modules    export-ignore
+/public          export-ignore
+/tests           export-ignore
+/storage         export-ignore
+
+# --- Dev / Tooling (tidak perlu di distribusi) ---
+/.github         export-ignore
+/.gitignore      export-ignore
+/phpunit.xml     export-ignore
+/phpstan.neon.dist export-ignore
+/package.json    export-ignore
+/package-lock.json export-ignore
+/pnpm-lock.yaml  export-ignore
+/yarn.lock       export-ignore
+/vite.config.js  export-ignore
+/tailwind.config.js export-ignore
+/pint.json       export-ignore
+/.editorconfig   export-ignore
+/.styleci.yml    export-ignore
+/.prettierrc     export-ignore
+/.eslintrc.js    export-ignore
