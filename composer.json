@@ -3,14 +3,41 @@
   "description": "Custom authentication Laravel with Tailwind UI",
   "license": "MIT",
   "type": "library",
-  "autoload": {
-    "psr-4": {
-      "Dotclang\\AuthPackage\\": "src/"
-    }
-  },
   "authors": [
     {
       "name": "Edy Ridwan Hutagalung"
+    }
+  ],
+  "scripts": {
+    "lint:phpstan": "phpstan analyse -c phpstan.neon.dist --no-progress",
+    "lint:pint": "pint",
+    "lint:js": "npm run lint",
+    "lint": "composer run-script lint:js && composer run-script lint:pint && composer run-script lint:phpstan"
+  },
+  "require": {
+    "php": "^8.4",
+    "laravel/framework": "^10.0|^11.0|^12.0"
+  },
+  "require-dev": {
+    "larastan/larastan": "^3.0",
+    "laravel/pint": "dev-main"
+  },
+  "autoload": {
+    "psr-4": {
+      "Dotclang\\AuthPackage\\": "src/",
+      "Dotclang\\AuthPackage\\Database\\Factories\\": "database/factories/",
+      "Dotclang\\AuthPackage\\Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Dotclang\\AuthPackage\\Tests\\": "tests/"
+    }
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Dotclang/auth-package.git"
     }
   ],
   "minimum-stability": "dev",
@@ -21,30 +48,29 @@
       ]
     }
   },
-  "require": {
-    "php": "^8.4",
-    "laravel/framework": "^10.0|^11.0|^12.0"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/Dotclang/auth-package.git"
-    }
-  ],
-  "autoload-dev": {
-    "psr-4": {
-      "Dotclang\\AuthPackage\\": "src/",
-      "Dotclang\\AuthPackage\\Database\\Factories\\": "database/factories/"
-    }
-  },
-  "scripts": {
-    "lint:phpstan": "phpstan analyse -c phpstan.neon.dist --no-progress",
-    "lint:pint": "pint",
-    "lint:js": "npm run lint",
-    "lint": "composer run-script lint:js && composer run-script lint:pint && composer run-script lint:phpstan"
-  },
-  "require-dev": {
-    "larastan/larastan": "^3.0",
-    "laravel/pint": "dev-main"
+  "archive": {
+    "exclude": [
+      "/tests",
+      "/bootstrap",
+      "/docs",
+      "/examples",
+      "/storage",
+      "/.github",
+      "/.gitignore",
+      "/phpstan.neon.dist",
+      "/phpunit.xml",
+      "/package.json",
+      "/vite.config.js",
+      "/tailwind.config.js",
+      "/pnpm-lock.yaml",
+      "/yarn.lock",
+      "/artisan",
+      "/phpstan.neon.dist",
+      "/node_modules",
+      "/.editorconfig",
+      "/.styleci.yml",
+      "/.prettierrc",
+      "/.eslintrc.js"
+    ]
   }
 }

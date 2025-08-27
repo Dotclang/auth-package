@@ -56,7 +56,7 @@ class InstallCommand extends Command
 
         // Rewrite namespaces in published controllers (only files that reference the package namespace)
         $this->info('Rewriting controller namespaces to App namespace...');
-        $controllersDir = app_path('Http/Controllers');
+        $controllersDir = app_path('Http');
         if ($fs->isDirectory($controllersDir)) {
             $files = $fs->allFiles($controllersDir);
             foreach ($files as $file) {
@@ -66,58 +66,14 @@ class InstallCommand extends Command
                 if (! str_contains($contents, 'Dotclang\\AuthPackage')) {
                     continue;
                 }
-                // Replace namespace declaration if present
-                $contents = str_replace('namespace Dotclang\\AuthPackage\\', 'namespace App\\', $contents);
+                // Replace declaration if present
+                $contents = str_replace('Dotclang\\AuthPackage\\', 'App\\', $contents);
 
                 $fs->put($path, $contents);
                 $this->info('Updated controller: '.$path);
             }
         } else {
             $this->comment('No controllers directory found at: '.$controllersDir);
-        }
-
-        // Rewrite namespaces in published requests (only files that reference the package namespace)
-        $this->info('Rewriting request namespaces to App namespace...');
-        $requestsDir = app_path('Http/Requests');
-        if ($fs->isDirectory($requestsDir)) {
-            $files = $fs->allFiles($requestsDir);
-            foreach ($files as $file) {
-                $path = $file->getPathname();
-                $contents = $fs->get($path);
-
-                if (! str_contains($contents, 'Dotclang\\AuthPackage')) {
-                    continue;
-                }
-
-                $contents = str_replace('Dotclang\\AuthPackage\\', 'App\\', $contents);
-
-                $fs->put($path, $contents);
-                $this->info('Updated request: '.$path);
-            }
-        } else {
-            $this->comment('No requests directory found at: '.$requestsDir);
-        }
-
-        // Rewrite namespaces in published middleware (only files that reference the package namespace)
-        $this->info('Rewriting middleware namespaces to App namespace...');
-        $middlewareDir = app_path('Http/Middleware');
-        if ($fs->isDirectory($middlewareDir)) {
-            $files = $fs->allFiles($middlewareDir);
-            foreach ($files as $file) {
-                $path = $file->getPathname();
-                $contents = $fs->get($path);
-
-                if (! str_contains($contents, 'Dotclang\\AuthPackage')) {
-                    continue;
-                }
-
-                $contents = str_replace('Dotclang\\AuthPackage\\', 'App\\', $contents);
-
-                $fs->put($path, $contents);
-                $this->info('Updated middleware: '.$path);
-            }
-        } else {
-            $this->comment('No middleware directory found at: '.$middlewareDir);
         }
 
         $packageRoutesDir = __DIR__.'/../../routes';
