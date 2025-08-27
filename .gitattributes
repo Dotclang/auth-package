@@ -31,3 +31,4 @@
 /.styleci.yml    export-ignore
 /.prettierrc     export-ignore
 /.eslintrc.js    export-ignore
+/artisan         export-ignore
